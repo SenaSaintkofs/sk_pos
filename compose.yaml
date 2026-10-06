@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  # FRONTEND: Angular en desarrollo activo (Puerto 4200)
+  pos-frontend:
+    image: docker.io/library/node:20-alpine
+    container_name: sk_pos_angular_dev
+    ports:
+      - "4200:4200"
+    # network_mode: host
+    volumes:
+      - ./frontend:/app:z
+    working_dir: /app
+    command: sh -c "npm install && npm run start -- --host 0.0.0.0 --disable-host-check" # añadir --disable-host-check"
+    #command: tail -f /dev/null # Espera indefinida para instalar
+    environment:
+      - NODE_ENV=development
+
+  # BACKEND: Servidor Web + PHP Nativo (Puerto 8080)
+  pos-backend:
+    image: docker.io/trafex/php-nginx:latest
+    container_name: sk_pos_php_backend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend:/var/www/html:z
+    environment:
+      - DB_HOST=pos-db           # 1. Apunta al nombre del servicio.
+      - DB_NAME=pos_sistema      # 2. Debe ser igual a MYSQL_DATABASE
+      - DB_USER=pos_user         # 3. Debe ser igual a MYSQL_USER
+      - DB_PASS=ClaveDePruebas   # 4. Debe ser igual a MYSQL_PASSWORD
+    depends_on:
+      - pos-db
+    restart: always
+
+  # BASE DE DATOS: MySQL Nativo (Puerto 3306)
+  pos-db:
+    image: docker.io/library/mysql:8.0
+    container_name: sk_pos_mysql
+    ports:
+      - "3306:3306"
+
+    environment:
+      - MYSQL_ROOT_PASSWORD=Emergencia99
+      - MYSQL_DATABASE=pos_sistema
+      - MYSQL_USER=pos_user
+      - MYSQL_PASSWORD=ClaveDePruebas
+    volumes:
+      - pos_db_data:/var/lib/mysql:z
+    restart: always
+
+  # ADMINISTRADOR DE BD: phpMyAdmin (Puerto 8081)
+  pos-phpmyadmin:
+    image: docker.io/library/phpmyadmin:latest
+    container_name: sk_pos_phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      - PMA_HOST=pos-db
+      - PMA_USER=pos_user
+      - PMA_PASSWORD=ClaveDePruebas
+    depends_on:
+      - pos-db
+    restart: always
+
+volumes:
+  pos_db_data:
