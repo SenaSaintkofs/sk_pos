@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title>Frontend</title>
@@ -8,10 +9,25 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <!--Pegar CDN aquin-->
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: { colors: { posred: '#dc2626', posdark: '#1f2937' } } } }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
 </head>
+
 <body>
   <app-root></app-root>
 
-  <!--Pegar CDN aquin-->
+  <script>
+    function toggleMenu() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); document.getElementById('overlay').classList.toggle('hidden') }
+    function openModal(id) { document.getElementById(id).classList.remove('hidden') }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden') }
+    function toast(msg) { const t = document.createElement('div'); t.className = 'fixed bottom-5 right-5 z-[100] bg-gray-900 text-white px-4 py-3 rounded-xl shadow-lg text-sm'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2200) }
+  </script>
 </body>
+
 </html>

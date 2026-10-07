@@ -1,0 +1,12 @@
+<body class="bg-gray-50 text-gray-800 min-h-screen">
+    <div id="app" class="min-h-screen flex">
+
+        <app-nav></app-nav>
+        <div id="overlay" onclick="toggleMenu()" class="fixed inset-0 bg-black/30 z-40 hidden lg:hidden"></div>
+
+        <main class="w-full lg:pl-64 min-h-screen flex flex-col">
+            <app-header></app-header>
+            <router-outlet />
+        </main>
+    </div>
+</body>
