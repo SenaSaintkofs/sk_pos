@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --host 0.0.0.0 --disable-host-check",
+    "start": "ng serve --host=0.0.0.0 --port=4200 --allowed-hosts=all",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "release": "standard-version"
+    "release": "standard-version --skip.tag --amend"
   },
   "private": true,
   "packageManager": "npm@10.8.2",
