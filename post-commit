@@ -1,3 +1,0 @@
-#!/bin/sh
-# Ejecutar standard-version dentro del contenedor de Node usando Podman
-podman exec sk_pos_angular_dev npm run release
