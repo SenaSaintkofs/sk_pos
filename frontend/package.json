@@ -1,10 +1,9 @@
 {
   "name": "frontend",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --host=0.0.0.0 --port=4200 --allowed-hosts=all",
-    "build": "ng build",
+    "start": "ng serve --host=0.0.0.0 --port=4200",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "release": "standard-version --skip.tag --amend"
