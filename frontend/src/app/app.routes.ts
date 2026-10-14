@@ -4,6 +4,7 @@ import { Dashboard } from "./modulos/dashboard/dashboard";
 import { Clientes } from "./modulos/clientes/clientes";
 import { Productos } from "./modulos/productos/productos";
 import { Login } from './modulos/login/login';
+import { Categorias } from './modulos/categorias/categorias';
 
 export const routes: Routes = [
     {
@@ -13,6 +14,7 @@ export const routes: Routes = [
             { path: 'dashboard', component: Dashboard },
             { path: 'clientes', component: Clientes },
             { path: 'productos', component: Productos },
+            { path: 'categorias', component: Categorias },
             { path: '', redirectTo: 'dashboard', pathMatch: 'full'}
         ]
     },
