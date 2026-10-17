@@ -10,19 +10,19 @@ export class Categoria {
 
   constructor(private http: HttpClient){};
 
-  consulta() {
-    return this.http.get(`{this.url}?control=?control.consulta`); 
+  consultar() {
+    return this.http.get(`${this.url}?control=consultar`); 
   }
 
   insertar(params: any) {
-    return this.http.post(`{this.url}?control=?control.insertar`, JSON.stringify(params)); 
+    return this.http.post(`${this.url}?control=insertar`, JSON.stringify(params)); 
   }
 
   editar(id: number, params: any) {
-    return this.http.post(`{this.url}?control=?control.editar&id=${id}`, JSON.stringify(params)); 
+    return this.http.post(`${this.url}?control=editar&id=${id}`, JSON.stringify(params)); 
   }
 
   eliminar(id: number) {
-    return this.http.get(`{this.url}?control=?control.editar&id=${id}`); 
+    return this.http.get(`${this.url}?control=eliminar&id=${id}`); 
   }
 }

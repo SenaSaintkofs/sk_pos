@@ -1,1 +1,62 @@
-<p>categorias works!</p>
+<section class="flex-1 p-4 sm:p-6">
+    <div class="space-y-5">
+        <div class="flex flex-col sm:flex-row gap-3 justify-between">
+            <div class="relative flex-1 max-w-xl">
+                <span class="absolute left-3 top-2.5">⌕</span>
+                <input class="w-full pl-9 pr-4 py-2.5 border rounded-xl" placeholder="Buscar categorías...">
+            </div>
+            <button (click)="mostrarFormulario('ver')" class="bg-red-600 text-white rounded-xl px-4 py-2.5 font-semibold hover:bg-red-700">+ Nuevo</button>
+        </div>
+
+        <div class="bg-white border rounded-2xl overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-50 text-gray-500">
+                        <tr>
+                            <th class="text-left px-5 py-3">Nombre</th>
+                            <th class="text-center px-5 py-3 w-44">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of categoria" class="border-t hover:bg-gray-50 transition-colors">
+                            <td class="px-5 py-3 font-medium text-gray-900 align-middle">{{ item.nombre }}</td>
+                            <td class="px-5 py-3 text-center align-middle space-x-2">
+                                <!-- Botón Editar -->
+                                <button (click)="cargarDatos(item, item.id_categoria)" class="inline-flex items-center gap-1 bg-amber-50 text-amber-700 hover:bg-amber-600 hover:text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 shadow-sm border border-amber-200">Editar</button>
+                                
+                                <!-- Botón Eliminar: Dispara el SweetAlert2 -->
+                                <button (click)="eliminar(item.id_categoria)" class="inline-flex items-center gap-1 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 shadow-sm border border-red-100">Eliminar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Formulario -->
+    <div id="modalForm" [ngClass]="{'hidden': m_formulario == false}" class="fixed inset-0 z-[90] bg-black/40 p-4 flex items-center justify-center">
+        <div class="bg-white rounded-2xl w-full max-w-lg p-6">
+            <div class="flex justify-between">
+                <h3 class="font-bold text-xl">
+                    {{ botones_formulario == false ? 'Nueva Categoría' : 'Editar Categoría' }}
+                </h3>
+                <button (click)="mostrarFormulario('no ver')" class="text-2xl hover:text-gray-500">×</button>
+            </div>
+            <div class="grid grid-cols-1 gap-4 mt-5">
+                <label>
+                    <span class="text-sm font-semibold text-gray-700">Nombre de la Categoría</span>
+                    <input [(ngModel)]="objCategoria.nombre" class="mt-1 w-full border rounded-xl px-4 py-2.5 bg-gray-50 focus:bg-white transition-all" placeholder="Ej. Abarrotes, Bebidas...">
+                </label>
+                <span *ngIf="validar_nombre == false" style="color: red;" class="text-xs font-medium pl-1">Debe insertar el nombre de la categoría</span>
+            </div>
+            <div class="flex justify-end gap-2 mt-6">
+                <button (click)="mostrarFormulario('no ver')" class="border rounded-xl px-4 py-2.5 font-medium text-gray-600 hover:bg-gray-50">Cancelar</button>
+                
+                <button *ngIf="botones_formulario == false" (click)="validar('guardar')" class="bg-red-600 text-white rounded-xl px-5 py-2.5 font-semibold hover:bg-red-700 transition-colors">Guardar</button>
+                
+                <button *ngIf="botones_formulario == true" (click)="validar('editar')" class="bg-blue-600 text-white rounded-xl px-5 py-2.5 font-semibold hover:bg-blue-700 transition-colors">Actualizar</button>
+            </div>
+        </div>
+    </div>
+</section>

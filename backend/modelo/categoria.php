@@ -9,7 +9,7 @@
             //throw new \Exception('Not implemented');
         }
 
-        public function consulta() {
+        public function consultar() {
             $sql = "SELECT * FROM CATEGORIA ORDER BY nombre";
             $res = mysqli_query($this->conexion, $sql) or die("No se ha encontrado categoria");
 
@@ -27,7 +27,7 @@
             mysqli_query($this->conexion, $sql) or die("No se elimino el registro");
 
             $vec = [];
-            $vec['resultado'] = "ok";
+            $vec['resultado'] = "OK";
             $vec['mensaje'] = "Se elimino el registro";
 
             return $vec;
@@ -38,18 +38,18 @@
             mysqli_query($this->conexion, $sql) or die("No se inserto el registro");
 
             $vec = [];
-            $vec['resultado'] = "ok";
+            $vec['resultado'] = "OK";
             $vec['mensaje'] = "Se ha insertado el registro";
 
             return $vec;
         }
 
         public function editar($id, $params) {
-            $sql = "UPDATE CATERGORIA SET nombre = '$params->nombre' WHERE id_categoria = $id";
+            $sql = "UPDATE CATEGORIA SET nombre = '$params->nombre' WHERE id_categoria = $id";
             mysqli_query($this->conexion, $sql) or die("No se edito el registro");
 
             $vec = [];
-            $vec['resultado'] = "ok";
+            $vec['resultado'] = "OK";
             $vec['mensaje'] = "Se ha editado el registro";
 
             return $vec;
