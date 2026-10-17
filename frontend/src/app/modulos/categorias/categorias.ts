@@ -1,8 +1,8 @@
+import { Categoria } from '../../servicios/categoria';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Categoria } from '../../servicios/categoria';
-import Swal from 'sweetalert2';
 import { FormsModule } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-categorias',
@@ -11,7 +11,8 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './categorias.css',
 })
 export class Categorias implements OnInit {
-  categoria: any;
+  categoria: any[] = [];
+  buscarCategoria: string = "";
 
   objCategoria = {
     nombre: ''
@@ -133,5 +134,14 @@ export class Categorias implements OnInit {
       nombre: ''
     };
     this.id_categoria = 0;
+  }
+// Buscar segun el texto
+  filtrarCategorias(): any[] {
+    if (!this.categoria) return [];
+    if (!this.buscarCategoria.trim()) return this.categoria;
+
+    return this.categoria.filter(item => 
+      item.nombre.toLowerCase().includes(this.buscarCategoria.toLowerCase())
+    );
   }
 }
