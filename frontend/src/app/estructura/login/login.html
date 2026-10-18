@@ -1,0 +1,57 @@
+<div class="grid min-h-screen lg:grid-cols-2 bg-gray-100">
+    <!-- PANEL IZQUIERDO: RELLENO en PANTALLA GRANDE -->
+    <div class="hidden bg-gray-900 p-12 text-white lg:flex lg:flex-col lg:justify-between">
+        <div>
+            <div class="flex items-center gap-2 text-xl font-bold">
+                <span class="inline-block w-4 h-4 rounded-full bg-[#C5A880]"></span>
+                <b class="text-xl">
+                    <span class="text-red-600">Saint</span>
+                    <span>Kofs</span>
+                    <span class="text-gray-500">POS</span>
+                </b>
+            </div>
+            
+            <div class="mt-28 max-w-lg">
+                <p class="text-sm font-bold uppercase tracking-widest text-red-400">Punto de venta</p>
+                <h1 class="mt-3 text-5xl font-black leading-tight"><span class="text-[#C5A880]">Saludos,</span> gestione su minimercado desde un solo lugar.</h1>
+                <p class="mt-6 text-gray-300 font-normal text-base">Ventas, productos, clientes, pedidos y usuarios en una interfaz amigable.</p>
+            </div>
+        </div>
+        <small class="text-gray-500">© 2026 · Santiago CS | @saintkofs.pw</small>
+    </div> <!-- Cierre panel izquierdo -->
+
+    <!-- PANEL DERECHO: Formulario de inicio de sesión conectado a Angular -->
+    <div class="flex items-center justify-center p-6 w-full">
+        <div class="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl border border-gray-100">
+            <b class="text-red-600 uppercase tracking-wider text-xs font-bold">Bienvenido</b>
+            <h2 class="mt-1 text-2xl font-bold text-gray-900">Iniciar sesión</h2>
+            <p class="mt-2 text-sm text-gray-500">Ingresa tus credenciales para continuar.</p>
+
+            <!-- Mensaje de error condicional -->
+            @if (error) {
+                <div class="mt-4 p-3 bg-red-50 text-red-600 text-sm rounded-xl font-medium border border-red-100">
+                    Correo o contraseña incorrectos. Por favor intente de nuevo.
+                </div>
+            }
+
+            <form (ngSubmit)="consultar('')" class="mt-7 space-y-5">
+                <label class="block text-sm font-medium text-gray-700">
+                    Correo
+                    <input type="email" name="correo" [(ngModel)]="correo" required placeholder="demo@saintkofs.pw"
+                        class="mt-2 w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 bg-gray-50/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#C5A880] focus:border-[#C5A880] transition-all duration-200">
+                </label>
+                
+                <label class="block text-sm font-medium text-gray-700">
+                    Contraseña
+                    <input type="password" name="clave" [(ngModel)]="clave" required (keyup)="consultar($event.keyCode)" placeholder="••••••"
+                        class="mt-2 w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 bg-gray-50/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#C5A880] focus:border-[#C5A880] transition-all duration-200">
+                </label>
+
+                <button type="submit"
+                    class="w-full rounded-xl bg-red-600 py-3 font-semibold text-white hover:bg-red-700 transition-all shadow-md active:scale-[0.99] transform">
+                    Ingresar
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
