@@ -1,0 +1,48 @@
+<div class="grid min-h-screen lg:grid-cols-2 bg-[#2a2f3a]">
+    <!-- PANEL IZQUIERDO: RELLENO en PANTALLA GRANDE -->
+    <div
+        class="hidden bg-[#1e222b] p-12 text-[#e5e7eb] lg:flex lg:flex-col lg:justify-between border-r border-gray-800">
+        <div>
+            <div class="flex items-center gap-2 text-xl font-bold">
+                <span class="inline-block w-4 h-4 rounded-full bg-[#C5A880]"></span>
+                <b class="text-xl">
+                    <span class="text-[#991b1b]">Saint</span>
+                    <span>Kofs</span>
+                    <span class="text-gray-500">POS</span>
+                </b>
+            </div>
+
+            <div class="mt-28 max-w-lg">
+                <p class="text-sm font-bold uppercase tracking-widest text-[#991b1b]">Ruta no encontrada</p>
+                <h1 class="mt-3 text-5xl font-black leading-tight">
+                    <span class="text-[#C5A880]">Vaya,</span> parece que se ha perdido en el almacén.
+                </h1>
+                <p class="mt-6 text-gray-400 font-normal text-base">
+                    La página que busca no existe o fue movida a otra sección de la plataforma.
+                </p>
+            </div>
+        </div>
+        <small class="text-gray-500">© 2026 · Santiago CS | @saintkofs.pw</small>
+    </div>
+
+    <!-- PANEL DERECHO: Mensaje de error -->
+    <div class="flex items-center justify-center p-6 w-full">
+        <div
+            class="w-full max-w-md rounded-2xl bg-[#1e222b] p-8 shadow-2xl border border-gray-800 text-[#e5e7eb] text-center">
+            <!-- Número de Error Gigante -->
+            <span class="block text-8xl font-black text-[#991b1b] tracking-wider animate-pulse">
+                404
+            </span>
+
+            <h2 class="mt-4 text-2xl font-bold">Página no disponible</h2>
+            <p class="mt-2 text-sm text-gray-400">No encontramos el inventario de esta URL.</p>
+
+            <div class="mt-8">
+                <a routerLink="/login"
+                    class="inline-block w-full text-center rounded-xl bg-[#991b1b] py-3 font-semibold text-white hover:bg-red-800 transition-all shadow-md active:scale-[0.99] transform">
+                    Volver al inicio
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
