@@ -1,0 +1,43 @@
+:root {
+    --pos-red: #dc2626;
+    --pos-dark: #1f2937;
+    --pos-gray: #6b7280;
+}
+
+/* Tarjetas de KPI */
+.card-hover {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s;
+}
+
+.card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.06);
+  border-color: #fecaca;
+}
+
+/* Botones de menú rápido */
+.menu-tile {
+  transition: transform 0.18s ease, border-color 0.18s, box-shadow 0.18s, background-color 0.18s, color 0.18s;
+}
+
+.menu-tile:hover {
+  transform: translateY(-2px);
+  border-color: #ef4444;
+  box-shadow: 0 10px 20px rgba(220, 38, 38, 0.05);
+  background-color: #ffffff;
+}
+
+.menu-tile:active {
+  transform: scale(0.97);
+  background: var(--pos-red);
+  color: #ffffff;
+}
+
+/* efectos visuales */
+.soft-shadow {
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.03);
+}
+
+.text-xxs {
+  font-size: 0.65rem;
+}
