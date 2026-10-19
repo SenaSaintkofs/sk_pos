@@ -1,20 +1,33 @@
-<aside id="sidebar"
-    class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transform -translate-x-full lg:translate-x-0 transition-transform duration-200">
+<aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transform -translate-x-full lg:translate-x-0 transition-transform duration-200">
+    <!-- Título del POS -->
     <div class="h-16 flex items-center justify-between px-5 border-b">
         <div class="font-extrabold text-xl"><span class="text-red-600">Saint</span>Kofs <span
                 class="text-gray-500">POS</span></div><button onclick="toggleMenu()"
             class="lg:hidden text-2xl">×</button>
     </div>
     <nav class="p-4 space-y-1">
-        <a href="#" routerLink="/dashboard" class="flex items-center gap-3 px-3 py-2 rounded-lg bg-red-50 text-red-600 font-semibold"><span class="text-xl">▦</span>Dashboard - (Proximamente)</a>
+        <!-- CONTROL DE ACCESO -->
+        @if (rol === 'ADMINISTRADOR' || rol === 'EMPLEADO') {
+            @if (rol === 'ADMINISTRADOR') {
+                <div class="bg-gray-100 p-2 rounded text-sm text-center font-bold text-gray-700">
+                    Módulo de Administración Activo
+                </div>
+
+                <a href="#" routerLink="/" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-100"><span class="text-xl">♟</span>Usuarios - (Proximamente)</a>
+            }
+            <a href="#" routerLink="/dashboard" class="flex items-center gap-3 px-3 py-2 rounded-lg bg-red-50 text-red-600 font-semibold"><span class="text-xl">▦</span>Dashboard - (Proximamente)</a>
+        }
+        
+        <!-- Enlaces de Navegación -->
         <a href="#" routerLink="/productos" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-100"><span class="text-xl">▣</span>Productos - (Proximamente)</a>
         <a href="#" routerLink="/clientes" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-100"><span class="text-xl">♙</span>Clientes - (Proximamente)</a>
         <a href="#" routerLink="/" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-100"><span class="text-xl">⌁</span>Ventas - (Proximamente)</a>
         <a href="#" routerLink="/categorias" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-100"><span class="text-xl">◈</span>Categorías</a>
         <a href="#" routerLink="/" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-100"><span class="text-xl">◫</span>Pedidos - (Proximamente)</a>
-        <a href="#" routerLink="/" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-100"><span class="text-xl">♟</span>Usuarios - (Proximamente)</a></nav>
-
+        
+        <!-- Botón Inferior de Salida -->
         <div class="absolute bottom-0 left-0 right-0 p-4 border-t">
-            <a href="#" routerLink="/login" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 hover:bg-red-50 hover:text-red-600"><span class="text-xl">↪</span>Cerrar sesión</a>
+            <a href="#" (click)="cerrar()" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-600 hover:bg-red-50 hover:text-red-600"><span class="text-xl">↪</span>Cerrar sesión</a>
         </div>
+    </nav>
 </aside>
