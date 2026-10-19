@@ -25,7 +25,7 @@
             return $vec;
         }
 
-        /*public function eliminar($id) {
+        public function eliminar($id) {
             $sql = "DELETE FROM CREDITO_HISTORIAL WHERE id_credito = $id";
             mysqli_query($this->conexion, $sql) or die("No se elimino el registro");
 
@@ -34,7 +34,7 @@
             $vec['mensaje'] = "Se elimino el registro";
 
             return $vec;
-        }*/
+        }
 
         public function insertar($params) {
             $sql = "INSERT INTO CREDITO_HISTORIAL(id_venta, deuda_inicial, deuda_actual, estado) VALUES(id_venta = $params->id_venta, deuda_inicial = $params->deuda_inicial, deuda_actual = $params->deuda_actual, estado = $params->estado)"; // comilla solo con txt

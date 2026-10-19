@@ -40,7 +40,7 @@ export class Pedidos implements OnInit {
     private sProveedor: Proveedor,
     private sProducto: Producto,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.cargarFechaActual();
@@ -82,12 +82,11 @@ export class Pedidos implements OnInit {
     });
   }
 
-  public actualizarPrecioProducto(); void {
+  public actualizarPrecioProducto(): void {
     const prodSeleccionado = this.listProductos.find(p => Number(p.id_producto) === Number(this.objPedido.id_producto));
     if (prodSeleccionado) {
       this.objPedido.costo_unitario = Number(prodSeleccionado.costo_compra);
       this.calcularTotal();
-      }
     }
   }
 
@@ -102,12 +101,12 @@ export class Pedidos implements OnInit {
   public cargarDatos(item: any, id: number): void {
     this.botones_formulario = true;
     this.mostrarFormulario(true);
-    
+
     this.objPedido.id_proveedor = Number(item.id_proveedor);
-    this.objPedido.fecha = item.fecha.substring(0, 10); 
+    this.objPedido.fecha = item.fecha.substring(0, 10);
     this.objPedido.valor_total = Number(item.valor_total);
     this.objPedido.estado_pago = item.estado_pago;
-    
+
     if (item.id_producto) this.objPedido.id_producto = Number(item.id_producto);
     this.objPedido.cantidad = item.cantidad ? Number(item.cantidad) : 1;
     this.objPedido.costo_unitario = this.objPedido.valor_total / this.objPedido.cantidad;
@@ -129,6 +128,10 @@ export class Pedidos implements OnInit {
   }
   // inicio del CRUD - CREATE
   public guardarPedido(): void {
+    // Formatear datos
+    this.objPedido.id_proveedor = Number(this.objPedido.id_proveedor);
+    this.objPedido.id_producto = Number(this.objPedido.id_producto);
+
     this.sPedido.insertar(this.objPedido).subscribe((datos: any) => {
       if (datos['resultado'] === 'ok') {
         this.consulta();
@@ -143,7 +146,7 @@ export class Pedidos implements OnInit {
     this.sPedido.editar(this.id_pedido, this.objPedido).subscribe((datos: any) => {
       if (datos['resultado'] === 'ok' || datos['resultado'] === 'OK') {
         this.consulta();
-        this.mostrarFormulario('no ver');
+        this.mostrarFormulario(false);
         Swal.fire('¡Actualizado!', 'El registro de compra fue modificado', 'success');
       }
     });
@@ -171,20 +174,25 @@ export class Pedidos implements OnInit {
     });
   }
 
-  public mostrarFormulario(dato: string): void {
-    switch(dato) {
-      case 'ver':
-        this.m_formulario = true;
+  public mostrarFormulario(dato: boolean): void {
+    this.m_formulario = dato;
+    if (!dato) {
+      this.botones_formulario = false
+      this.limpiar();
+    } else {
+      if (!this.botones_formulario) {
+        if (this.listProveedores.length > 0) {
+          this.objPedido.id_proveedor = Number(this.listProveedores[0].id_proveedor);
+        }
+        if (this.listProductos.length > 0) {
+          this.objPedido.id_producto = Number(this.listProductos[0].id_producto);
+          this.actualizarPrecioProducto();
+        }
         this.calcularTotal();
-      break;
-      case 'no ver':
-        this.m_formulario = false;
-        this.botones_formulario = false
-        this.limpiar();
-      break;
+      }
+      this.cdr.detectChanges();
     }
   }
-
   // Inio de Utilidades: añadir fecha automatica
   private cargarFechaActual(): void {
     const hoy = new Date();

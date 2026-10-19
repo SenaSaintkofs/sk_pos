@@ -1,5 +1,5 @@
 import { Categoria } from '../../servicios/categoria';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
@@ -22,8 +22,8 @@ export class Categorias implements OnInit {
   validar_nombre = true;
   m_formulario = false;
   botones_formulario = false;
-
-  constructor(private scate: Categoria) {}
+  // permite redibujar de manera automatica
+  constructor(private scate: Categoria, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.consulta();
@@ -33,6 +33,7 @@ export class Categorias implements OnInit {
     this.scate.consultar().subscribe({
       next: (resultado: any) => {
         this.categoria = resultado;
+        this.cdr.detectChanges(); // redibujar
       },
       error: (err: any) => {
         console.error(err);
