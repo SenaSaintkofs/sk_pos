@@ -5,6 +5,7 @@
         "auth",
         "errors",
         "dashboard",
-        "services"
+        "services",
+        "config"
     ]
 }

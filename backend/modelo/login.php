@@ -11,7 +11,7 @@ class Login
 
     public function consultar($correo, $clave)
     {
-        $sql = "SELECT * FROM USUARIO WHERE correo = ?";
+        $sql = "SELECT *, CONCAT_WS(' ', primer_nombre, primer_apellido) AS nombre FROM USUARIO WHERE correo = ?";
 
         $stmt = mysqli_prepare($this->conexion, $sql);
         if (!$stmt) {

@@ -49,16 +49,16 @@ interface QuickTile {
 })
 export class Dashboard implements OnInit {
   
-  // Simulación del usuario logueado. Prueba cambiando a 'CAJERO' o 'CLIENTE'
+  // Toma de datos
   public currentUser = {
-    nombre: 'Carlos',
-    rol: 'ADMINISTRADOR' 
+    nombre: '',
+    rol: '' 
   };
 
   public canViewFullDashboard = false;
   public canViewDashboardAtAll = false;
 
-  // 1. KPIs principales del negocio
+  // listado de KPIs 
   public metrics: MetricCard[] = [
     { 
       title: 'Ventas de hoy', 
@@ -90,7 +90,7 @@ export class Dashboard implements OnInit {
     }
   ];
 
-  // 2. Montos brutos de la semana (Se calculan porcentajes automáticamente)
+  // Ingresos de la semana 
   public weeklySales: WeeklyBar[] = [
     { day: 'L', amount: 1200000 },
     { day: 'M', amount: 1650000 },
@@ -101,7 +101,7 @@ export class Dashboard implements OnInit {
     { day: 'D', amount: 550000 }
   ];
 
-  // 3. Categorías de productos
+  // Ingreso por categoria
   public categories: Category[] = [
     { name: 'Abarrotes', percentage: 42, color: 'bg-red-600' },
     { name: 'Bebidas', percentage: 28, color: 'bg-orange-500' },
@@ -127,6 +127,9 @@ export class Dashboard implements OnInit {
   ];
 
   ngOnInit() {
+    // Trabajar con datos guardados
+    this.currentUser.nombre = sessionStorage.getItem('nombre') || 'Usuario';
+    this.currentUser.rol = sessionStorage.getItem('rol') || '';
     const rol = this.currentUser.rol;
     
     // ADMINISTRADOR ve todo. EMPPLEADO solo accesos rápidos y últimas ventas

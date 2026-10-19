@@ -1,24 +1,31 @@
 import { Routes } from '@angular/router';
+
 import { Main } from './estructura/main';
-import { Dashboard } from "./modulos/dashboard/dashboard";
+import { Login } from './estructura/login/login';
+import { Estado404 } from './estructura/estado-404/estado-404';
+
 import { Clientes } from "./modulos/clientes/clientes";
+import { Dashboard } from "./modulos/dashboard/dashboard";
 import { Productos } from "./modulos/productos/productos";
-import { Login } from './modulos/login/login';
 import { Categorias } from './modulos/categorias/categorias';
+import { validarUsuarioGuard } from './guardian/validar-usuario-guard';
 
 export const routes: Routes = [
+    {
+        path: 'login', component: Login
+    },
     {
         path: '', component: Main,
         children:
         [
-            { path: 'dashboard', component: Dashboard },
-            { path: 'clientes', component: Clientes },
-            { path: 'productos', component: Productos },
-            { path: 'categorias', component: Categorias },
+            { path: 'dashboard', component: Dashboard, canActivate: [validarUsuarioGuard] },
+            { path: 'clientes', component: Clientes, canActivate: [validarUsuarioGuard] },
+            { path: 'productos', component: Productos, canActivate: [validarUsuarioGuard] },
+            { path: 'categorias', component: Categorias, canActivate: [validarUsuarioGuard] },
             { path: '', redirectTo: 'dashboard', pathMatch: 'full'}
         ]
     },
-    {
-        path: 'login', component: Login
-    }
+    { 
+        path: '**', component: Estado404
+    }  // comodin 404
 ];
