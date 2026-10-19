@@ -9,6 +9,7 @@ import { Dashboard } from "./modulos/dashboard/dashboard";
 import { Productos } from "./modulos/productos/productos";
 import { Categorias } from './modulos/categorias/categorias';
 import { validarUsuarioGuard } from './guardian/validar-usuario-guard';
+import { Pedidos } from './modulos/pedidos/pedidos';
 
 export const routes: Routes = [
     {
@@ -22,6 +23,7 @@ export const routes: Routes = [
             { path: 'clientes', component: Clientes, canActivate: [validarUsuarioGuard] },
             { path: 'productos', component: Productos, canActivate: [validarUsuarioGuard] },
             { path: 'categorias', component: Categorias, canActivate: [validarUsuarioGuard] },
+            { path: 'pedidos', component: Pedidos, canActivate: [validarUsuarioGuard]},
             { path: '', redirectTo: 'dashboard', pathMatch: 'full'}
         ]
     },

@@ -1,5 +1,5 @@
 <?php
-    class Pedido{
+    class Pedido {
         // Atrbutos
         private $conexion;
 
@@ -10,7 +10,7 @@
         }
 
         public function consulta() {
-            $sql = "SELECT PE.*, PRO.nombre FROM PEDIDO PE
+            $sql = "SELECT PE.*, PRO.nombre AS proveedor_nombre FROM PEDIDO PE
                     INNER JOIN PROVEEDOR PRO ON PE.id_proveedor = PRO.id_proveedor
                     ORDER BY fecha DESC";
 
@@ -25,19 +25,19 @@
             return $vec;
         }
 
-        /*public function eliminar($id) {
+        public function eliminar($id) {
             $sql = "DELETE FROM PEDIDO WHERE id_pedido = $id";
             mysqli_query($this->conexion, $sql) or die("No se elimino el registro");
 
             $vec = [];
             $vec['resultado'] = "ok";
-            $vec['mensaje'] = "Se elimino el registro";
+            $vec['mensaje'] = "Se ha eliminado el registro";
 
             return $vec;
-        }*/
+        }
 
         public function insertar($params) {
-            $sql = "INSERT INTO PEDIDO(id_proveedor, fecha, valor_total, estado_pago) VALUES(id_proveedor = $params->id_proveedor, fecha = '$params->fecha', valor_total = $params->valor_total, estado_pago = '$params->estado_pago')"; // comilla solo con txt
+            $sql = "INSERT INTO PEDIDO (id_proveedor, fecha, valor_total, estado_pago) VALUES ( $params->id_proveedor, '$params->fecha', $params->valor_total, '$params->estado_pago')"; // comilla solo con txt
             mysqli_query($this->conexion, $sql) or die("No se inserto el registro");
 
             $vec = [];

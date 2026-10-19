@@ -5,24 +5,23 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class Pedido {
+  private url = "http://localhost:8080/controlador/pedido.php";
 
-  url = "http://localhost:8080/controlador/pedido.php";
-
-  constructor(private http: HttpClient){};
+  constructor(private http: HttpClient) {}
 
   consulta() {
-    return this.http.get(`{this.url}?control=?consulta`); 
+    return this.http.get(`${this.url}?control=consulta`); 
   }
 
   insertar(params: any) {
-    return this.http.post(`{this.url}?control=?insertar`, JSON.stringify(params)); 
+    return this.http.post(`${this.url}?control=insertar`, JSON.stringify(params)); 
   }
 
   editar(id: number, params: any) {
-    return this.http.post(`{this.url}?control=?editar&id=${id}`, JSON.stringify(params)); 
+    return this.http.post(`${this.url}?control=editar&id=${id}`, JSON.stringify(params)); 
   }
 
   eliminar(id: number) {
-    return this.http.get(`{this.url}?control=?editar&id=${id}`); 
+    return this.http.get(`${this.url}?control=eliminar&id=${id}`); 
   }
 }

@@ -7,7 +7,7 @@
     require_once('../modelo/pedido.php');
 
     global $conexion;
-
+    $vec = [];
     $control = $_GET['control'];
     $pedido = new Pedido($conexion);
 
