@@ -55,3 +55,32 @@ textarea:focus {
     outline-offset: 1px;
     border-color: #ef4444
 }
+
+/* DASHBOARD */
+
+body {
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+.card-hover {
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.09);
+  border-color: #fca5a5; /* Borde rojo/rosado al pasar el mouse */
+}
+
+.soft-shadow {
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.07);
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 7px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 99px;
+}

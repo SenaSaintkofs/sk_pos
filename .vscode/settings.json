@@ -4,6 +4,7 @@
         "backend",
         "auth",
         "errors",
-        "dashboard"
+        "dashboard",
+        "services"
     ]
 }
