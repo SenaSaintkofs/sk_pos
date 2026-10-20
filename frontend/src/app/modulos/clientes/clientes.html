@@ -1,1 +1,82 @@
-<p>clientes works!</p>
+<section class="flex-1 p-4 sm:p-6">
+    <div class="space-y-5">
+        <div class="flex flex-col sm:flex-row gap-3 justify-between">
+            <div class="relative flex-1 max-w-xl">
+                <span class="absolute left-3 top-3 text-gray-400">⌕</span>
+                <input [(ngModel)]="buscarCliente" class="w-full pl-9 pr-4 py-2.5 border rounded-xl bg-gray-50 focus:bg-white transition-all" placeholder="Buscar clientes por nombre o documento...">
+            </div>
+            <button (click)="mostrarFormulario('ver')" class="bg-red-600 text-white rounded-xl px-4 py-2.5 font-semibold hover:bg-red-700 transition-colors shadow-sm">+ Nuevo</button>
+        </div>
+
+        <div class="bg-white border rounded-2xl overflow-hidden shadow-sm">
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-50 text-gray-500">
+                        <tr>
+                            <th class="text-left px-5 py-3">Nombre</th>
+                            <th class="text-left px-5 py-3">Documento</th>
+                            <th class="text-left px-5 py-3">Teléfono</th>
+                            <th class="text-left px-5 py-3">Correo</th>
+                            <th class="text-center px-5 py-3 w-44">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of filtrarClientes()" class="border-t hover:bg-gray-50 transition-colors">
+                            <td class="px-5 py-3 font-medium text-gray-900 align-middle">{{ item.primer_nombre }} {{ item.primer_apellido }}</td>
+                            <td class="px-5 py-3 text-gray-600 align-middle">CC {{ item.numero_documento }}</td>
+                            <td class="px-5 py-3 text-gray-600 align-middle">{{ item.telefono }}</td>
+                            <td class="px-5 py-3 text-gray-600 align-middle">{{ item.correo }}</td>
+                            <td class="px-5 py-3 text-center align-middle space-x-2">
+                                <button (click)="cargarDatos(item, item.id_usuario)" class="inline-flex items-center gap-1 bg-amber-50 text-amber-700 hover:bg-amber-600 hover:text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition-all shadow-sm border border-amber-200">Editar</button>
+                                <button (click)="eliminar(item.id_usuario)" class="inline-flex items-center gap-1 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition-all shadow-sm border border-red-100">Eliminar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Formulario -->
+    <div id="modalForm" [ngClass]="{'hidden': m_formulario == false}" class="fixed inset-0 z-[90] bg-black/40 p-4 flex items-center justify-center">
+        <div class="bg-white rounded-2xl w-full max-w-lg p-6">
+            <div class="flex justify-between items-center pb-3 border-b">
+                <h3 class="font-bold text-xl text-gray-900">
+                    {{ botones_formulario == false ? 'Nuevo Cliente' : 'Editar Cliente' }}
+                </h3>
+                <button (click)="mostrarFormulario('no ver')" class="text-2xl text-gray-400 hover:text-gray-700">×</button>
+            </div>
+            
+            <div class="grid sm:grid-cols-2 gap-4 mt-5">
+                <label>
+                    <span class="text-sm font-semibold text-gray-700">Primer Nombre</span>
+                    <input [(ngModel)]="objCliente.primer_nombre" class="mt-1 w-full border rounded-xl px-4 py-2.5 bg-gray-50 focus:bg-white transition-all" placeholder="Nombre">
+                </label>
+                <label>
+                    <span class="text-sm font-semibold text-gray-700">Primer Apellido</span>
+                    <input [(ngModel)]="objCliente.primer_apellido" class="mt-1 w-full border rounded-xl px-4 py-2.5 bg-gray-50 focus:bg-white transition-all" placeholder="Apellido">
+                </label>
+                <label>
+                    <span class="text-sm font-semibold text-gray-700">Nro. Documento</span>
+                    <input [(ngModel)]="objCliente.numero_documento" class="mt-1 w-full border rounded-xl px-4 py-2.5 bg-gray-50 focus:bg-white transition-all" placeholder="Documento">
+                </label>
+                <label>
+                    <span class="text-sm font-semibold text-gray-700">Teléfono</span>
+                    <input [(ngModel)]="objCliente.telefono" class="mt-1 w-full border rounded-xl px-4 py-2.5 bg-gray-50 focus:bg-white transition-all" placeholder="Teléfono">
+                </label>
+                <label class="sm:col-span-2">
+                    <span class="text-sm font-semibold text-gray-700">Correo Electrónico</span>
+                    <input [(ngModel)]="objCliente.correo" type="email" class="mt-1 w-full border rounded-xl px-4 py-2.5 bg-gray-50 focus:bg-white transition-all" placeholder="correo@dominio.com">
+                </label>
+            </div>
+
+            <span *ngIf="!validar_campos" class="text-xs font-medium text-red-600 block mt-3">Complete los campos requeridos.</span>
+
+            <div class="flex justify-end gap-2 mt-6 pt-3 border-t">
+                <button (click)="mostrarFormulario('no ver')" class="border rounded-xl px-4 py-2.5 font-medium text-gray-600 hover:bg-gray-50">Cancelar</button>
+                <button *ngIf="!botones_formulario" (click)="validar('guardar')" class="bg-red-600 text-white rounded-xl px-5 py-2.5 font-semibold hover:bg-red-700 transition-colors">Guardar</button>
+                <button *ngIf="botones_formulario" (click)="validar('editar')" class="bg-blue-600 text-white rounded-xl px-5 py-2.5 font-semibold hover:bg-blue-700 transition-colors">Actualizar</button>
+            </div>
+        </div>
+    </div>
+</section>
