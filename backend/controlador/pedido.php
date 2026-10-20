@@ -1,41 +1,41 @@
 <?php
-    // Lineas importantes para permiso CORS
-    header('Access-Control-Allow-Origin: *');
-    header('Access-Control-Allow-Headers: Origin; X-Requested-With, Content-Type, Accept');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE');
 
-    require_once('../modelo/conexion.php');
-    require_once('../modelo/pedido.php');
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    exit();
+}
 
-    global $conexion;
-    $vec = [];
-    $control = $_GET['control'];
-    $pedido = new Pedido($conexion);
+require_once('../modelo/conexion.php');
+require_once('../modelo/pedido.php');
 
-    switch($control) {
-        case 'consulta':
-            $vec = $pedido->consulta();
+global $conexion;
+$vec = [];
+$control = isset($_GET['control']) ? $_GET['control'] : '';
+$pedido = new Pedido($conexion);
+
+switch ($control) {
+    case 'consulta':
+        $vec = $pedido->consulta();
         break;
-        case 'insertar':
-            $json = file_get_contents('php://input');
-            $params = json_decode($json);
-            $vec = $pedido->insertar($params);
+    case 'insertar':
+        $json = file_get_contents('php://input');
+        $params = json_decode($json);
+        $vec = $pedido->insertar($params);
         break;
-        case 'editar':
-            $json = file_get_contents('php://input');
-            $id = $_GET['id'];
-            $params = json_decode($json);
-            $vec = $pedido->editar($id, $params);
+    case 'editar':
+        $json = file_get_contents('php://input');
+        $id = $_GET['id'];
+        $params = json_decode($json);
+        $vec = $pedido->editar($id, $params);
         break;
-        case 'eliminar':
-            $id = $_GET['id'];
-            $vec = $pedido->eliminar($id);
+    case 'eliminar':
+        $id = $_GET['id'];
+        $vec = $pedido->eliminar($id);
         break;
-    }
+}
 
-    $datos = json_encode($vec);
-    header('Content-Type: application/json');
-    echo $datos;
-
-// http://localhost:8080/controlador/pedido.php?control=consulta
-?>
-
+$datos = json_encode($vec);
+header('Content-Type: application/json');
+echo $datos;

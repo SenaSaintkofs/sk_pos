@@ -1,97 +1,94 @@
-<div class="p-6 bg-gray-50 min-h-screen">
-
-    <!-- ENCABEZADO Y ACCIONES -->
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-        <div>
-            <h1 class="text-2xl font-black text-gray-900">Gestión de Pedidos</h1>
-            <p class="text-xs text-gray-500">Historial de compras y órdenes a proveedores</p>
+<section class="flex-1 p-4 sm:p-6 bg-gray-50 min-h-screen">
+    <div class="space-y-5">
+        <!-- ENCABEZADO Y ACCIONES -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+                <h1 class="text-2xl font-black text-gray-900">Gestión de Pedidos</h1>
+                <p class="text-xs text-gray-500">Historial de compras y órdenes a proveedores</p>
+            </div>
+            <button (click)="mostrarFormulario(true)"
+                class="bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 px-4 rounded-xl flex items-center gap-2 shadow-sm transition-all">
+                <span>＋</span> Nuevo pedido
+            </button>
         </div>
-        <button (click)="mostrarFormulario(true)"
-            class="bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 px-4 rounded-xl flex items-center gap-2 shadow-sm transition-all">
-            <span>＋</span> Nuevo pedido
-        </button>
+
+        <!-- TABLA PRINCIPAL DE PEDIDOS -->
+        <div class="bg-white rounded-2xl border soft-shadow overflow-hidden shadow-sm">
+            <div class="p-4 border-b bg-white flex items-center">
+                <span class="text-gray-400 mr-2">⌕</span>
+                <input type="text" [(ngModel)]="buscarPedido" placeholder="Buscar compra por proveedor u orden..."
+                    class="w-full text-sm outline-none bg-transparent">
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead>
+                        <tr class="bg-gray-50/70 border-b text-gray-400 text-xs font-semibold uppercase tracking-wider">
+                            <th class="p-4">ID Orden</th>
+                            <th class="p-4">Proveedor</th>
+                            <th class="p-4">Fecha de Compra</th>
+                            <th class="p-4 text-right">Valor Total</th>
+                            <th class="p-4 text-center">Estado de Pago</th>
+                            <th class="p-4 text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (item of filtrarPedidos(); track item.id_pedido) {
+                        <tr class="border-b last:border-0 hover:bg-gray-50/50 transition-colors">
+                            <td class="p-4 font-bold text-red-600">#ORD-{{ item.id_pedido }}</td>
+                            <td class="p-4 font-semibold text-gray-800">{{ item.proveedor_nombre }}</td>
+                            <td class="p-4 text-gray-500 text-xs">{{ item.fecha | date:'dd MMM yyyy, hh:mm a' }}</td>
+                            <td class="p-4 text-right font-black text-gray-900">{{ item.valor_total | currency:'COP':'symbol':'1.0-0' }}</td>
+                            <td class="p-4 text-center">
+                                <span class="px-3 py-1 rounded-full text-xs font-bold"
+                                    [class.bg-emerald-50]="item.estado_pago === 'PAGADO'"
+                                    [class.text-emerald-700]="item.estado_pago === 'PAGADO'"
+                                    [class.bg-amber-50]="item.estado_pago === 'PENDIENTE'"
+                                    [class.text-amber-700]="item.estado_pago === 'PENDIENTE'">
+                                    {{ item.estado_pago }}
+                                </span>
+                            </td>
+                            <td class="p-4 text-center flex justify-center gap-2">
+                                <button (click)="cargarDatos(item, item.id_pedido)"
+                                    class="inline-flex items-center gap-1 bg-amber-50 text-amber-700 hover:bg-amber-600 hover:text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition-all shadow-sm border border-amber-200">Editar</button>
+                                <button (click)="eliminarPedido(item.id_pedido)"
+                                    class="inline-flex items-center gap-1 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition-all shadow-sm border border-red-100">Eliminar</button>
+                            </td>
+                        </tr>
+                        } @empty {
+                        <tr>
+                            <td colspan="6" class="p-8 text-center text-gray-400 font-medium">No se han registrado órdenes de compra de mercancía.</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
-    <!-- TABLA PRINCIPAL DE PEDIDOS -->
-    <div class="bg-white rounded-2xl border soft-shadow overflow-hidden">
-        <div class="p-4 border-b bg-white flex items-center">
-            <span class="text-gray-400 mr-2">⌕</span>
-            <input type="text" [(ngModel)]="buscarPedido" placeholder="Buscar compra por proveedor u orden..."
-                class="w-full text-sm outline-none bg-transparent">
-        </div>
-
-        <div class="overflow-x-auto">
-            <table class="w-full text-left text-sm">
-                <thead>
-                    <tr class="bg-gray-50/70 border-b text-gray-400 text-xs font-semibold uppercase tracking-wider">
-                        <th class="p-4">ID Orden</th>
-                        <th class="p-4">Proveedor</th>
-                        <th class="p-4">Fecha de Compra</th>
-                        <th class="p-4 text-right">Valor Total</th>
-                        <th class="p-4 text-center">Estado de Pago</th>
-                        <th class="p-4 text-center">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (item of filtrarPedidos(); track item.id_pedido) {
-                    <tr class="border-b last:border-0 hover:bg-gray-50/50 transition-colors">
-                        <td class="p-4 font-bold text-red-600">#ORD-{{ item.id_pedido }}</td>
-                        <td class="p-4 font-semibold text-gray-800">{{ item.proveedor_nombre }}</td>
-                        <td class="p-4 text-gray-500 text-xs">{{ item.fecha | date:'dd MMM yyyy, hh:mm a' }}</td>
-                        <td class="p-4 text-right font-black text-gray-900">{{ item.valor_total |
-                            currency:'COP':'symbol':'1.0-0' }}</td>
-                        <td class="p-4 text-center">
-                            <span class="px-3 py-1 rounded-full text-xs font-bold"
-                                [class.bg-emerald-50]="item.estado_pago === 'PAGADO'"
-                                [class.text-emerald-700]="item.estado_pago === 'PAGADO'"
-                                [class.bg-amber-50]="item.estado_pago === 'PENDIENTE'"
-                                [class.text-amber-700]="item.estado_pago === 'PENDIENTE'">
-                                {{ item.estado_pago }}
-                            </span>
-                        </td>
-                        <td class="p-4 text-center flex justify-center gap-2">
-                            <button (click)="cargarDatos(item, item.id_pedido)"
-                                class="text-blue-600 hover:text-blue-800 text-xs font-bold px-2.5 py-1 rounded-lg hover:bg-blue-50 transition-colors">Editar</button>
-                            <button (click)="eliminarPedido(item.id_pedido)"
-                                class="text-red-600 hover:text-red-800 text-xs font-bold px-2.5 py-1 rounded-lg hover:bg-red-50 transition-colors">Eliminar</button>
-                        </td>
-                    </tr>
-                    } @empty {
-                    <tr>
-                        <td colspan="6" class="p-8 text-center text-gray-400 font-medium">No se han registrado órdenes
-                            de compra de mercancía.</td>
-                    </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- MODAL DE NUEVO PEDIDO (S1, S2, S3) -->
+    <!-- MODAL DE NUEVO / EDITAR PEDIDO (S1, S2, S3) -->
     @if (m_formulario) {
-    <div class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 backdrop-blur-sm animate-fade-in">
+    <div class="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
         <div class="bg-white rounded-2xl border max-w-xl w-full p-6 shadow-xl relative max-h-[90vh] overflow-y-auto">
             <button (click)="mostrarFormulario(false)"
                 class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl font-bold">×</button>
 
-            <h3 class="text-xl font-black text-gray-900 mb-1">Cargar Nuevo Pedido</h3>
+            <h3 class="text-xl font-black text-gray-900 mb-1">
+                {{ !botones_formulario ? 'Cargar Nuevo Pedido' : 'Editar Pedido' }}
+            </h3>
             <p class="text-xs text-gray-500 mb-6">Abastecimiento de stock de inventario del negocio</p>
 
             <div class="space-y-6">
                 <!-- S1: INFORMACIÓN DEL PRODUCTO -->
                 <div class="border p-4 rounded-xl bg-gray-50/50">
-                    <h4 class="text-xs font-black uppercase text-gray-400 tracking-wider mb-2">S1 · Selección de
-                        Producto</h4>
-                    <div class="flex items-center gap-3">
-                        <label class="block text-xxs font-bold text-gray-500 mb-1">Seleccionar Artículo del
-                            Catálogo</label>
-                        <span
-                            class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-lg shadow-inner">▣</span>
+                    <h4 class="text-xs font-black uppercase text-gray-400 tracking-wider mb-2">S1 · Selección de Producto</h4>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-1">Seleccionar Artículo del Catálogo</label>
                         <select [(ngModel)]="objPedido.id_producto" (change)="actualizarPrecioProducto()"
-                            class="w-full border rounded-lg p-2 text-sm font-semibold outline-none bg-white focus:border-red-500">
-                            @for (prod of listProductos; track prod.id_producto) {
-                            <option [value]="prod.id_producto">{{ prod.nombre }} (Stock: {{ prod.stock }} {{
-                                prod.unidad_medida }})</option>
+                            class="w-full border rounded-lg p-2.5 text-sm font-semibold outline-none bg-white focus:border-red-500">
+                            <option value="" disabled selected>-- Seleccione un producto --</option>
+                            @for (prod of listProductos; track $index) {
+                            <option [value]="prod.id_producto">{{ prod.nombre }} (Stock: {{ prod.stock }} {{ prod.unidad_medida }})</option>
                             }
                         </select>
                     </div>
@@ -99,55 +96,52 @@
 
                 <!-- S2: CANTIDAD Y COSTOS -->
                 <div class="border p-4 rounded-xl bg-gray-50/50">
-                    <h4 class="text-xs font-black uppercase text-gray-400 tracking-wider mb-3">S2 · Costo de Operación
-                    </h4>
+                    <h4 class="text-xs font-black uppercase text-gray-400 tracking-wider mb-3">S2 · Costo de Operación</h4>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xxs font-bold text-gray-500 mb-1">Costo Unitario de Compra
-                                ($)</label>
-                            <input type="number" [(ngModel)]="objPedido.costo_unitario"
-                                (ngModelChange)="calcularTotal()"
-                                class="w-full border rounded-lg p-2 text-sm font-semibold outline-none focus:border-red-500 bg-white">
+                            <label class="block text-xs font-bold text-gray-500 mb-1">Costo Unitario ($)</label>
+                            <input type="number" [(ngModel)]="objPedido.costo_unitario" (ngModelChange)="calcularTotal()"
+                                class="w-full border rounded-lg p-2.5 text-sm font-semibold outline-none focus:border-red-500 bg-white">
                         </div>
                         <div>
-                            <label class="block text-xxs font-bold text-gray-500 mb-1">Cantidad Solicitada</label>
+                            <label class="block text-xs font-bold text-gray-500 mb-1">Cantidad Solicitada</label>
                             <input type="number" [(ngModel)]="objPedido.cantidad" (ngModelChange)="calcularTotal()"
-                                class="w-full border rounded-lg p-2 text-sm font-semibold outline-none focus:border-red-500 bg-white">
+                                class="w-full border rounded-lg p-2.5 text-sm font-semibold outline-none focus:border-red-500 bg-white">
                         </div>
                     </div>
                     <div class="mt-4 pt-3 border-t border-dashed flex justify-between items-center text-sm">
                         <span class="text-gray-500 font-medium">Subtotal Estimado:</span>
-                        <span class="font-black text-gray-900">{{ objPedido.valor_total |
-                            currency:'COP':'symbol':'1.0-0' }}</span>
+                        <span class="font-black text-gray-900 text-base">{{ objPedido.valor_total | currency:'COP':'symbol':'1.0-0' }}</span>
                     </div>
                 </div>
 
                 <!-- S3: ASIGNACIÓN DE PROVEEDOR Y PAGO -->
                 <div class="border p-4 rounded-xl bg-gray-50/50">
-                    <h4 class="text-xs font-black uppercase text-gray-400 tracking-wider mb-3">S3 · Proveedor y Cierre
-                    </h4>
+                    <h4 class="text-xs font-black uppercase text-gray-400 tracking-wider mb-3">S3 · Proveedor y Cierre</h4>
                     <div class="space-y-3">
                         <div>
-                            <label class="block text-xxs font-bold text-gray-500 mb-1">Seleccionar Proveedor
-                                Registrado</label>
+                            <label class="block text-xs font-bold text-gray-500 mb-1">Seleccionar Proveedor Registrado</label>
                             <select [(ngModel)]="objPedido.id_proveedor"
-                                class="w-full border rounded-lg p-2 text-sm font-semibold outline-none bg-white focus:border-red-500">
-                                @for (prov of listProveedores; track prov.id_proveedor) {
+                                class="w-full border rounded-lg p-2.5 text-sm font-semibold outline-none bg-white focus:border-red-500">
+                                <option value="" disabled selected>-- Seleccione un proveedor --</option>
+                                @for (prov of listProveedores; track $index) {
                                 <option [value]="prov.id_proveedor">{{ prov.nombre }}</option>
                                 }
                             </select>
                         </div>
                         <div>
-                            <label class="block text-xxs font-bold text-gray-500 mb-1">Condición de Pago</label>
+                            <label class="block text-xs font-bold text-gray-500 mb-1">Condición de Pago</label>
                             <div class="grid grid-cols-2 gap-2">
                                 <button (click)="objPedido.estado_pago = 'PAGADO'" type="button"
-                                    class="border p-2 rounded-xl text-xs font-bold transition-all"
+                                    class="border p-2.5 rounded-xl text-xs font-bold transition-all"
                                     [class.bg-gray-800]="objPedido.estado_pago === 'PAGADO'"
-                                    [class.text-white]="objPedido.estado_pago === 'PAGADO'">PAGADO</button>
+                                    [class.text-white]="objPedido.estado_pago === 'PAGADO'"
+                                    [class.bg-white]="objPedido.estado_pago !== 'PAGADO'">PAGADO</button>
                                 <button (click)="objPedido.estado_pago = 'PENDIENTE'" type="button"
-                                    class="border p-2 rounded-xl text-xs font-bold transition-all"
+                                    class="border p-2.5 rounded-xl text-xs font-bold transition-all"
                                     [class.bg-gray-800]="objPedido.estado_pago === 'PENDIENTE'"
-                                    [class.text-white]="objPedido.estado_pago === 'PENDIENTE'">PENDIENTE</button>
+                                    [class.text-white]="objPedido.estado_pago === 'PENDIENTE'"
+                                    [class.bg-white]="objPedido.estado_pago !== 'PENDIENTE'">PENDIENTE</button>
                             </div>
                         </div>
                     </div>
@@ -155,21 +149,19 @@
             </div>
 
             <!-- ACCIONES DE CIERRE -->
-            <div class="mt-6 flex gap-3 justify-end text-sm">
+            <div class="mt-6 flex gap-3 justify-end text-sm pt-3 border-t">
                 <button (click)="mostrarFormulario(false)"
-                    class="border font-bold px-4 py-2 rounded-xl text-gray-500 hover:bg-gray-50 transition-colors">Cancelar</button>
+                    class="border font-bold px-4 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors">Cancelar</button>
 
                 @if (!botones_formulario) {
                 <button (click)="validar('guardar')"
-                    class="bg-red-600 hover:bg-red-700 text-white font-black px-5 py-2 rounded-xl shadow-sm transition-colors">Guardar
-                    pedido</button>
+                    class="bg-red-600 hover:bg-red-700 text-white font-black px-5 py-2.5 rounded-xl shadow-sm transition-colors">Guardar pedido</button>
                 } @else {
                 <button (click)="validar('editar')"
-                    class="bg-gray-900 hover:bg-gray-800 text-white font-black px-5 py-2 rounded-xl shadow-sm transition-colors">Actualizar
-                    registro</button>
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-black px-5 py-2.5 rounded-xl shadow-sm transition-colors">Actualizar registro</button>
                 }
             </div>
         </div>
     </div>
     }
-</div>
+</section>
