@@ -7,6 +7,7 @@
     require_once('../modelo/producto.php');
 
     global $conexion;
+    $vec = [];
 
     $control = $_GET['control'];
     $producto = new Producto($conexion);

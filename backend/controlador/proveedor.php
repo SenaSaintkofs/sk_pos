@@ -7,6 +7,7 @@
     require_once('../modelo/proveedor.php');
 
     global $conexion;
+    $vec = [];
 
     $control = $_GET['control'];
     $proveedor = new Proveedor($conexion);
