@@ -13,23 +13,20 @@ import Swal from 'sweetalert2';
   styleUrl: './pedidos.css'
 })
 export class Pedidos implements OnInit {
-  // Listas de la db
   public listPedidos: any[] = [];
   public listProveedores: any[] = [];
   public listProductos: any[] = [];
 
   public buscarPedido: string = '';
   public m_formulario = false;
-  public botones_formulario = false; // Guardar/Actualizar
+  public botones_formulario = false; 
   public id_pedido: number = 0;
 
-  // Dato enlazado al formulario de los pasos (S1, S2, S3)
   public objPedido = {
     id_proveedor: 0,
     fecha: '',
     valor_total: 0,
     estado_pago: 'PENDIENTE',
-
     id_producto: 0,
     cantidad: 1,
     costo_unitario: 0
@@ -44,80 +41,81 @@ export class Pedidos implements OnInit {
 
   ngOnInit(): void {
     this.cargarFechaActual();
-    this.consulta();
-    this.cargarProveedores();
-    this.cargarProductos()
+    this.cargarDatosIniciales();
+  }
+
+  // Carga paralela y segura para evitar que los selects arranquen vacíos
+  private cargarDatosIniciales(): void {
+    this.sProveedor.consulta().subscribe((resProv: any) => {
+      this.listProveedores = Array.isArray(resProv) ? resProv : (resProv ? Object.values(resProv) : []);
+      
+      this.sProducto.consulta().subscribe((resProd: any) => {
+        this.listProductos = Array.isArray(resProd) ? resProd : (resProd ? Object.values(resProd) : []);
+        
+        // Una vez tenemos ambas listas, consultamos los pedidos
+        this.consulta();
+        this.cdr.detectChanges();
+      });
+    });
   }
 
   public consulta(): void {
     this.sPedido.consulta().subscribe({
       next: (resultado: any) => {
-        this.listPedidos = resultado;
-        this.cdr.detectChanges(); // forzar nueva carga
+        this.listPedidos = Array.isArray(resultado) ? resultado : (resultado ? [resultado] : []);
+        this.cdr.detectChanges();
       },
       error: (err) => console.error('Error al traer pedidos:', err)
     });
   }
 
-  // Trae datos de provedores
-  private cargarProveedores(): void {
-    this.sProveedor.consulta().subscribe((resultado: any) => {
-      this.listProveedores = resultado;
-      if (this.listProveedores.length > 0 && !this.botones_formulario) {
-        this.objPedido.id_proveedor = this.listProveedores[0].id_proveedor;
-      }
-      this.cdr.detectChanges();
-    });
-  }
-
-  // Trae datos de productos
-  private cargarProductos(): void {
-    this.sProducto.consulta().subscribe((resultado: any) => {
-      this.listProductos = resultado;
-      if (this.listProductos.length > 0 && !this.botones_formulario) {
-        this.objPedido.id_producto = this.listProductos[0].id_producto;
-        this.actualizarPrecioProducto();
-      }
-      this.cdr.detectChanges();
-    });
-  }
-
   public actualizarPrecioProducto(): void {
-    const prodSeleccionado = this.listProductos.find(p => Number(p.id_producto) === Number(this.objPedido.id_producto));
+    const idBuscar = Number(this.objPedido.id_producto);
+    const prodSeleccionado = this.listProductos.find(p => Number(p.id_producto) === idBuscar);
+
     if (prodSeleccionado) {
       this.objPedido.costo_unitario = Number(prodSeleccionado.costo_compra);
       this.calcularTotal();
     }
   }
 
-  // calcula el total al cambiar la cantidad o costo
   public calcularTotal(): void {
-    this.objPedido.valor_total = this.objPedido.costo_unitario * this.objPedido.cantidad;
+    this.objPedido.valor_total = Number(this.objPedido.costo_unitario) * Number(this.objPedido.cantidad);
   }
 
-  /**
-   * cargarDatos
-   */
   public cargarDatos(item: any, id: number): void {
     this.botones_formulario = true;
     this.mostrarFormulario(true);
 
-    this.objPedido.id_proveedor = Number(item.id_proveedor);
-    this.objPedido.fecha = item.fecha.substring(0, 10);
-    this.objPedido.valor_total = Number(item.valor_total);
-    this.objPedido.estado_pago = item.estado_pago;
+    setTimeout(() => {
+      this.objPedido.id_proveedor = Number(item.id_proveedor);
+      this.objPedido.fecha = item.fecha ? item.fecha.substring(0, 10) : '';
+      this.objPedido.valor_total = Number(item.valor_total);
+      this.objPedido.estado_pago = item.estado_pago;
 
-    if (item.id_producto) this.objPedido.id_producto = Number(item.id_producto);
-    this.objPedido.cantidad = item.cantidad ? Number(item.cantidad) : 1;
-    this.objPedido.costo_unitario = this.objPedido.valor_total / this.objPedido.cantidad;
+      if (item.id_producto) {
+        this.objPedido.id_producto = Number(item.id_producto);
+      }
 
-    this.id_pedido = id;
-    this.cdr.detectChanges();
+      this.objPedido.cantidad = item.cantidad ? Number(item.cantidad) : 1;
+      this.objPedido.costo_unitario = this.objPedido.cantidad > 0 
+        ? (this.objPedido.valor_total / this.objPedido.cantidad) 
+        : Number(item.costo_unitario || 0);
+
+      this.id_pedido = id;
+      this.cdr.detectChanges();
+    }, 50);
   }
 
   public validar(funcion: string): void {
-    if (this.objPedido.id_proveedor <= 0 || this.objPedido.valor_total <= 0) {
-      Swal.fire('Faltan Datos', 'Debe seleccionar un proveedor y revisar los montos.', 'warning');
+    this.objPedido.id_proveedor = Number(this.objPedido.id_proveedor);
+    this.objPedido.id_producto = Number(this.objPedido.id_producto);
+    this.objPedido.valor_total = Number(this.objPedido.valor_total);
+    this.objPedido.cantidad = Number(this.objPedido.cantidad);
+    this.objPedido.costo_unitario = Number(this.objPedido.costo_unitario);
+
+    if (this.objPedido.id_proveedor <= 0 || this.objPedido.id_producto <= 0 || this.objPedido.valor_total <= 0) {
+      Swal.fire('Faltan Datos', 'Debe seleccionar un proveedor, un producto y verificar que las cantidades sean mayores a 0.', 'warning');
     } else {
       if (funcion === 'guardar') {
         this.guardarPedido();
@@ -126,33 +124,31 @@ export class Pedidos implements OnInit {
       }
     }
   }
-  // inicio del CRUD - CREATE
-  public guardarPedido(): void {
-    // Formatear datos
-    this.objPedido.id_proveedor = Number(this.objPedido.id_proveedor);
-    this.objPedido.id_producto = Number(this.objPedido.id_producto);
 
+  public guardarPedido(): void {
     this.sPedido.insertar(this.objPedido).subscribe((datos: any) => {
-      if (datos['resultado'] === 'ok') {
+      if (datos && (datos['resultado'] === 'ok' || datos['resultado'] === 'OK')) {
         this.consulta();
         this.mostrarFormulario(false);
         Swal.fire('¡Éxito!', 'El pedido se registró correctamente', 'success');
+      } else {
+        Swal.fire('Error', 'El backend no pudo procesar la inserción', 'error');
       }
     });
   }
 
-  // UPDATE 
   public editarPedido(): void {
     this.sPedido.editar(this.id_pedido, this.objPedido).subscribe((datos: any) => {
-      if (datos['resultado'] === 'ok' || datos['resultado'] === 'OK') {
+      if (datos && (datos['resultado'] === 'ok' || datos['resultado'] === 'OK')) {
         this.consulta();
         this.mostrarFormulario(false);
         Swal.fire('¡Actualizado!', 'El registro de compra fue modificado', 'success');
+      } else {
+        Swal.fire('Error', 'El backend no pudo actualizar el registro', 'error');
       }
     });
   }
 
-  // DELETE
   public eliminarPedido(id: number): void {
     Swal.fire({
       title: '¿Eliminar pedido?',
@@ -161,11 +157,12 @@ export class Pedidos implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#2a2f3a',
       cancelButtonColor: '#991b1b',
-      confirmButtonText: 'Sí, eliminar'
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
         this.sPedido.eliminar(id).subscribe((datos: any) => {
-          if (datos['resultado'] === 'ok') {
+          if (datos && (datos['resultado'] === 'ok' || datos['resultado'] === 'OK')) {
             this.consulta();
             Swal.fire('Eliminado', 'El registro de compra fue removido', 'success');
           }
@@ -177,7 +174,7 @@ export class Pedidos implements OnInit {
   public mostrarFormulario(dato: boolean): void {
     this.m_formulario = dato;
     if (!dato) {
-      this.botones_formulario = false
+      this.botones_formulario = false;
       this.limpiar();
     } else {
       if (!this.botones_formulario) {
@@ -193,25 +190,25 @@ export class Pedidos implements OnInit {
       this.cdr.detectChanges();
     }
   }
-  // Inio de Utilidades: añadir fecha automatica
+
   private cargarFechaActual(): void {
     const hoy = new Date();
     this.objPedido.fecha = hoy.toISOString().substring(0, 10);
   }
 
-  // quitar datos
   public limpiar(): void {
     this.objPedido.cantidad = 1;
     this.id_pedido = 0;
     this.cargarFechaActual();
-    if (this.listProveedores.length > 0) this.objPedido.id_proveedor = this.listProveedores[0].id_proveedor;
+    if (this.listProveedores.length > 0) {
+      this.objPedido.id_proveedor = Number(this.listProveedores[0].id_proveedor);
+    }
     if (this.listProductos.length > 0) {
-      this.objPedido.id_producto = this.listProductos[0].id_producto;
+      this.objPedido.id_producto = Number(this.listProductos[0].id_producto);
       this.actualizarPrecioProducto();
     }
   }
 
-  // Buscardor 
   public filtrarPedidos(): any[] {
     if (!this.listPedidos) return [];
     if (!this.buscarPedido.trim()) return this.listPedidos;

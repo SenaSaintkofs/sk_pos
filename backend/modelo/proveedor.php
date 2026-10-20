@@ -14,8 +14,8 @@
             $res = mysqli_query($this->conexion, $sql) or die("No se ha encontrado categoria");
 
             $vec = [];
-
-            while($row = mysqli_fetch_array($res)){
+            // Evitar arreglos
+            while($row = mysqli_fetch_assoc($res)){
                 $vec[] = $row;
             }
 

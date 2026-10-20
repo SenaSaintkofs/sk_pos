@@ -1,13 +1,13 @@
 <?php
     // Lineas importantes para permiso CORS
     header('Access-Control-Allow-Origin: *');
-    header('Access-Control-Allow-Headers: Origin; X-Requested-With, Content-Type, Accept');
+    header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
 
     require_once('../modelo/conexion.php');
     require_once('../modelo/proveedor.php');
 
     global $conexion;
-
+    $vec = []; 
     $control = $_GET['control'];
     $proveedor = new Proveedor($conexion);
 

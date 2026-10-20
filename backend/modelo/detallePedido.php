@@ -10,7 +10,7 @@
         }
 
         public function consulta() {
-            $sql = "SELECT DP.*, PE.*, PRO.nombre FROM DETALLE_PEDIDO DP
+            $sql = "SELECT DP.*, PE.*, PRO.nombre AS producto_nombre FROM DETALLE_PEDIDO DP
                     INNER JOIN PEDIDO PE ON DP.id_pedido = PE.id_pedido
                     INNER JOIN PRODUCTO PRO ON DP.id_producto = PRO.id_producto
                     ORDER BY PE.fecha";
@@ -38,7 +38,7 @@
         }*/
 
         public function insertar($params) {
-            $sql = "INSERT INTO DETALLE_PEDIDO(id_pedido, id_producto, cantidad, costo_unitario) VALUES(id_pedido = $params->id_pedido, id_producto = $params->id_producto, cantidad = $params->cantidad, costo_unitario = $params->costo_unitario)"; // comilla solo con txt
+            $sql = "INSERT INTO DETALLE_PEDIDO(id_pedido, id_producto, cantidad, costo_unitario) VALUES(id_pedido, $params->id_pedido, id_producto, $params->id_producto, cantidad, $params->cantidad, costo_unitario, $params->costo_unitario)"; // comilla solo con txt
             mysqli_query($this->conexion, $sql) or die("No se inserto el registro");
 
             $vec = [];

@@ -33,7 +33,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @for (item of filtrarPedidos(); track item.id_pedido) {
+                    @for (item of filtrarPedidos(); track $index) {
                     <tr class="border-b last:border-0 hover:bg-gray-50/50 transition-colors">
                         <td class="p-4 font-bold text-red-600">#ORD-{{ item.id_pedido }}</td>
                         <td class="p-4 font-semibold text-gray-800">{{ item.proveedor_nombre }}</td>
@@ -89,8 +89,8 @@
                             class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-lg shadow-inner">▣</span>
                         <select [(ngModel)]="objPedido.id_producto" (change)="actualizarPrecioProducto()"
                             class="w-full border rounded-lg p-2 text-sm font-semibold outline-none bg-white focus:border-red-500">
-                            @for (prod of listProductos; track prod.id_producto) {
-                            <option [value]="prod.id_producto">{{ prod.nombre }} (Stock: {{ prod.stock }} {{
+                            @for (prod of listProductos; track $index) {
+                            <option [ngValue]="prod.id_producto">{{ prod.nombre }} (Stock: {{ prod.stock }} {{
                                 prod.unidad_medida }})</option>
                             }
                         </select>
@@ -132,8 +132,8 @@
                                 Registrado</label>
                             <select [(ngModel)]="objPedido.id_proveedor"
                                 class="w-full border rounded-lg p-2 text-sm font-semibold outline-none bg-white focus:border-red-500">
-                                @for (prov of listProveedores; track prov.id_proveedor) {
-                                <option [value]="prov.id_proveedor">{{ prov.nombre }}</option>
+                                @for (prov of listProveedores; track $index) {
+                                <option [ngValue]="prov.id_proveedor">{{ prov.nombre }}</option>
                                 }
                             </select>
                         </div>
