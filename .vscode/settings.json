@@ -6,6 +6,7 @@
         "errors",
         "dashboard",
         "services",
-        "config"
+        "config",
+        "products"
     ]
 }
