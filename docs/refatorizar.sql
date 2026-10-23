@@ -1,0 +1,41 @@
+USE pos_sistema;
+
+DROP TABLE IF EXISTS DETALLE_PEDIDO;
+DROP TABLE IF EXISTS DETALLE_VENTA;
+DROP TABLE IF EXISTS PRODUCTO;
+DROP TABLE IF EXISTS SUBCATEGORIA;
+
+CREATE TABLE PRODUCTO (
+    id_producto INT AUTO_INCREMENT PRIMARY KEY,
+    id_categoria INT NOT NULL,
+    codigo_barras VARCHAR(100) NULL UNIQUE,
+    nombre VARCHAR(150) NOT NULL,
+    stock INT NOT NULL DEFAULT 0,
+    unidad_medida VARCHAR(20) NOT NULL,
+    costo_compra DECIMAL(10,2) NOT NULL,
+    precio_venta DECIMAL(10,2) NOT NULL,
+    controla_stock BOOLEAN NOT NULL DEFAULT TRUE,
+    imagen_url VARCHAR(255) NULL,
+    FOREIGN KEY (id_categoria) REFERENCES CATEGORIA(id_categoria) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE DETALLE_VENTA (
+    id_detalle INT AUTO_INCREMENT PRIMARY KEY,
+    id_venta INT NOT NULL,
+    id_producto INT NOT NULL,
+    cantidad INT NOT NULL,
+    precio_unitario DECIMAL(10,2) NOT NULL,
+    descuento_aplicado DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    FOREIGN KEY (id_venta) REFERENCES VENTA(id_venta) ON DELETE RESTRICT,
+    FOREIGN KEY (id_producto) REFERENCES PRODUCTO(id_producto)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE DETALLE_PEDIDO (
+    id_detalle_pedido INT AUTO_INCREMENT PRIMARY KEY,
+    id_pedido INT NOT NULL,
+    id_producto INT NOT NULL,
+    cantidad INT NOT NULL,
+    costo_unitario DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (id_pedido) REFERENCES PEDIDO(id_pedido) ON DELETE CASCADE,
+    FOREIGN KEY (id_producto) REFERENCES PRODUCTO(id_producto)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

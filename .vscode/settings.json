@@ -7,6 +7,7 @@
         "dashboard",
         "services",
         "config",
-        "products"
+        "products",
+        "db"
     ]
 }
