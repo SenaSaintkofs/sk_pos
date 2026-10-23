@@ -24,10 +24,11 @@ services:
     volumes:
       - ./backend:/var/www/html:z
     environment:
-      - DB_HOST=pos-db           # 1. Apunta al nombre del servicio.
-      - DB_NAME=pos_sistema      # 2. Debe ser igual a MYSQL_DATABASE
-      - DB_USER=pos_user         # 3. Debe ser igual a MYSQL_USER
-      - DB_PASS=ClaveDePruebas   # 4. Debe ser igual a MYSQL_PASSWORD
+      - DB_HOST=${DB_HOST} # 1. Apunta al nombre del servicio.
+      - DB_NAME=${DB_NAME} # 2. Debe ser igual a MYSQL_DATABASE.
+      - DB_USER=${DB_USER} # 3. Debe ser igual a MYSQL_USER.
+      - DB_PASS=${DB_PASS} # 4. Debe ser igual a MYSQL_PASSWORD.
+
     depends_on:
       - pos-db
     restart: always
@@ -36,16 +37,20 @@ services:
   pos-db:
     image: docker.io/library/mysql:8.0
     container_name: sk_pos_mysql
+    # Reducir rango a local server
     ports:
-      - "3306:3306"
+      - "127.0.0.1:3306:3306"
 
     environment:
-      - MYSQL_ROOT_PASSWORD=Emergencia99
-      - MYSQL_DATABASE=pos_sistema
-      - MYSQL_USER=pos_user
-      - MYSQL_PASSWORD=ClaveDePruebas
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASS}
     volumes:
       - pos_db_data:/var/lib/mysql:z
+      # Se ejecuta de manera automatica la primera vez -v
+      - ./docs/db/datos.sql:/docker-entrypoint-initdb.d/01_estructura.sql:z
+      - ./docs/db/demos.sql:/docker-entrypoint-initdb.d/02_demo.sql:z
     restart: always
 
   # ADMINISTRADOR DE BD: phpMyAdmin (Puerto 8081)
@@ -55,9 +60,9 @@ services:
     ports:
       - "8081:80"
     environment:
-      - PMA_HOST=pos-db
-      - PMA_USER=pos_user
-      - PMA_PASSWORD=ClaveDePruebas
+      - PMA_HOST=${DB_HOST}
+      - PMA_USER=${DB_USER}
+      - PMA_PASSWORD=${DB_PASS}
     depends_on:
       - pos-db
     restart: always
