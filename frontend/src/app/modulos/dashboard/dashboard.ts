@@ -83,7 +83,7 @@ export class DashboardComponent implements OnInit {
     const rol = this.currentUser.rol;
     
     this.canViewFullDashboard = (rol === 'ADMINISTRADOR');
-    this.canViewDashboardAtAll = (rol === 'ADMINISTRADOR' || rol === 'CAJERO' || rol === 'CLIENTE');
+    this.canViewDashboardAtAll = (rol === 'ADMINISTRADOR' || rol === 'EMPLEADO' || rol === 'CLIENTE');
 
     if (this.canViewFullDashboard) {
       this.cargarDatosReales();

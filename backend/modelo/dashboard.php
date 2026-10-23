@@ -13,7 +13,7 @@ class Dashboard {
         $resVentasHoy = mysqli_query($this->conexion, "SELECT COALESCE(SUM(total), 0) as total_hoy FROM VENTA WHERE DATE(fecha) = CURDATE()");
         $datos['ventas_hoy'] = mysqli_fetch_assoc($resVentasHoy)['total_hoy'];
 
-        // 2. Conteo de productos y stock bajo (ej. stock <= 5)
+        // 2. Conteo de productos y stock bajo (stock <= 5)
         $resProductos = mysqli_query($this->conexion, "SELECT COUNT(*) as total_prod, SUM(CASE WHEN stock <= 5 THEN 1 ELSE 0 END) as stock_bajo FROM PRODUCTO");
         $rowProd = mysqli_fetch_assoc($resProductos);
         $datos['total_productos'] = $rowProd['total_prod'];
@@ -42,12 +42,11 @@ class Dashboard {
         }
         $datos['ultimas_ventas'] = $ventasVec;
 
-        // 6. Resumen por categorías (Porcentaje simulado o calculado según productos/ventas)
+        // 6. Resumen por categorías
         $resCat = mysqli_query($this->conexion, "
             SELECT c.nombre as name, COUNT(p.id_producto) as total_prod
             FROM CATEGORIA c
-            LEFT JOIN SUBCATEGORIA s ON c.id_categoria = s.id_categoria
-            LEFT JOIN PRODUCTO p ON s.id_subcategoria = p.id_subcategoria
+            LEFT JOIN PRODUCTO p ON c.id_categoria = p.id_categoria
             GROUP BY c.id_categoria, c.nombre
         ");
         $catVec = [];
