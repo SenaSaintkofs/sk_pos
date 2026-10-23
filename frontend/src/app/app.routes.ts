@@ -11,6 +11,7 @@ import { Categorias } from './modulos/categorias/categorias';
 import { validarUsuarioGuard } from './guardian/validar-usuario-guard';
 import { Pedidos } from './modulos/pedidos/pedidos';
 import { Usuarios } from './modulos/usuarios/usuarios';
+import { Ventas } from './modulos/ventas/ventas';
 
 export const routes: Routes = [
     {
@@ -26,6 +27,7 @@ export const routes: Routes = [
             { path: 'productos', component: Productos, canActivate: [validarUsuarioGuard] },
             { path: 'categorias', component: Categorias, canActivate: [validarUsuarioGuard] },
             { path: 'pedidos', component: Pedidos, canActivate: [validarUsuarioGuard]},
+            { path: 'ventas', component: Ventas, canActivate: [validarUsuarioGuard]},
             { path: '', redirectTo: 'dashboard', pathMatch: 'full'}
         ]
     },

@@ -1,0 +1,275 @@
+<section class="flex-1 p-4 sm:p-6 bg-gray-50 min-h-screen">
+    <div class="grid xl:grid-cols-12 gap-5 min-h-[680px]">
+        
+        <!-- S1 · LISTA DE PRODUCTOS -->
+        <section class="xl:col-span-5 bg-white border rounded-2xl p-4 flex flex-col shadow-sm">
+            <div class="flex items-center justify-between mb-3">
+                <div>
+                    <h2 class="font-bold text-gray-900">S1 · Lista de productos</h2>
+                    <p class="text-xs text-gray-500">Selecciona un producto para agregarlo</p>
+                </div>
+                <span class="text-xs bg-red-50 text-red-600 font-bold px-2 py-1 rounded-full border border-red-100">
+                    {{ filteredProducts.length }} productos
+                </span>
+            </div>
+
+            <div class="relative mb-3">
+                <span class="absolute left-3 top-3 text-gray-400">⌕</span>
+                <input [(ngModel)]="buscarProducto" 
+                       class="w-full border rounded-xl pl-9 pr-3 py-2.5 bg-gray-50 focus:bg-white text-sm outline-none" 
+                       placeholder="Buscar por nombre o código...">
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 overflow-y-auto scrollbar max-h-[550px] pr-1">
+                @for (p of filteredProducts; track p.id_producto) {
+                <div (click)="addProduct(p)" 
+                     class="product-card bg-white border rounded-2xl p-3 cursor-pointer hover:border-red-400 hover:shadow-md transition-all relative">
+                    <span class="absolute top-2 left-2 bg-yellow-100 text-yellow-800 text-[10px] font-bold px-2 py-0.5 rounded border border-yellow-200">
+                        Stock {{ p.stock }}
+                    </span>
+                    <div class="h-28 bg-gray-50 rounded-xl flex items-center justify-center text-4xl text-gray-300 border">
+                        ▣
+                    </div>
+                    <h3 class="font-bold text-sm text-gray-900 mt-2 truncate">{{ p.nombre }}</h3>
+                    <p class="text-[11px] text-gray-400">{{ p.codigo_barras || 'Sin código' }}</p>
+                    <p class="font-black text-red-600 mt-1 text-sm">{{ p.precio_venta | currency:'COP':'symbol':'1.0-0' }}</p>
+                </div>
+                } @empty {
+                <div class="col-span-full py-16 text-center text-gray-400 font-medium">
+                    No hay productos disponibles.
+                </div>
+                }
+            </div>
+        </section>
+
+        <!-- S2 · CARRITO / COMPRA -->
+        <section class="xl:col-span-4 bg-white border rounded-2xl p-4 flex flex-col shadow-sm">
+            <div class="flex justify-between mb-3 items-center">
+                <div>
+                    <h2 class="font-bold text-gray-900">S2 · Compra</h2>
+                    <p class="text-xs text-gray-500">Productos seleccionados</p>
+                </div>
+                <button (click)="clearCart()" class="text-xs text-red-600 font-semibold hover:underline">Limpiar</button>
+            </div>
+
+            <div class="space-y-3 flex-1 overflow-y-auto max-h-[550px] pr-1">
+                @if (cart.length === 0) {
+                    <div class="h-full min-h-[260px] flex items-center justify-center text-center text-gray-400">
+                        <div>
+                            <div class="text-5xl">🛒</div>
+                            <p class="mt-2 text-sm">El carrito está vacío</p>
+                        </div>
+                    </div>
+                }
+                @for (item of cart; track item.id_producto; let i = $index) {
+                <div class="border rounded-xl p-3 flex gap-3 bg-gray-50/50 items-center">
+                    <div class="w-14 h-14 bg-white rounded-lg grid place-items-center text-2xl border text-gray-300">▣</div>
+                    <div class="flex-1 min-w-0">
+                        <b class="text-xs text-gray-900 block truncate">{{ item.name }}</b>
+                        <p class="text-[11px] text-gray-500">{{ item.price | currency:'COP':'symbol':'1.0-0' }} c/u</p>
+                        <div class="flex items-center gap-1.5 mt-2">
+                            <button (click)="changeQty(i, -1)" class="w-6 h-6 border rounded bg-white font-bold text-xs hover:bg-gray-100">−</button>
+                            <input [value]="item.qty" (change)="updateQtyInput(i, $event)" class="w-10 text-center border rounded h-6 text-xs bg-white">
+                            <button (click)="changeQty(i, 1)" class="w-6 h-6 border rounded bg-white font-bold text-xs hover:bg-gray-100">＋</button>
+                            <button (click)="removeFromCart(i)" class="ml-auto text-[10px] text-red-500 hover:underline">Eliminar</button>
+                        </div>
+                    </div>
+                    <b class="text-xs text-gray-900">{{ item.price * item.qty | currency:'COP':'symbol':'1.0-0' }}</b>
+                </div>
+                }
+            </div>
+        </section>
+
+        <!-- S3 · RESUMEN Y BOTONES DE PAGO -->
+        <section class="xl:col-span-3 bg-white border rounded-2xl p-4 flex flex-col justify-between shadow-sm">
+            <div>
+                <h2 class="font-bold text-gray-900">S3 · Resumen</h2>
+                
+                <button (click)="openModal('clientModal')" class="mt-3 w-full border rounded-xl p-3 text-left hover:border-red-400 transition-colors bg-gray-50/50">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 bg-white border rounded-full flex items-center justify-center text-lg shadow-sm">♙</div>
+                        <div class="min-w-0">
+                            <b class="text-xs text-gray-900 block truncate">{{ customer.nombre }}</b>
+                            <p class="text-[11px] text-gray-500 truncate">Doc: {{ customer.documento }}</p>
+                        </div>
+                    </div>
+                </button>
+
+                <div class="border-t my-4"></div>
+
+                <div class="space-y-3 text-xs text-gray-600">
+                    <div class="flex justify-between">
+                        <span>Subtotal</span>
+                        <b class="text-gray-900">{{ subtotal | currency:'COP':'symbol':'1.0-0' }}</b>
+                    </div>
+                    @if (discountAmount > 0) {
+                    <div class="flex justify-between text-red-600">
+                        <span>Descuento aplicado</span>
+                        <b>- {{ discountAmount | currency:'COP':'symbol':'1.0-0' }}</b>
+                    </div>
+                    }
+                    <div class="flex justify-between items-center">
+                        <span>Descuento</span>
+                        <button (click)="openModal('discountModal')" class="text-red-600 font-semibold hover:underline">+ Agregar</button>
+                    </div>
+                    @if (deliveryCost > 0) {
+                    <div class="flex justify-between text-emerald-600">
+                        <span>Domicilio</span>
+                        <b>+ {{ deliveryCost | currency:'COP':'symbol':'1.0-0' }}</b>
+                    </div>
+                    }
+                    <div class="flex justify-between items-center">
+                        <span>Domicilio</span>
+                        <button (click)="openModal('deliveryModal')" class="text-red-600 font-semibold hover:underline">+ Agregar</button>
+                    </div>
+                    <div class="border-t pt-3 flex justify-between text-base">
+                        <b class="text-gray-900">Total</b>
+                        <b class="text-red-600 font-black">{{ grandTotal | currency:'COP':'symbol':'1.0-0' }}</b>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 pt-4 border-t mt-4">
+                <button (click)="clearCart()" class="border rounded-xl py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">Limpiar</button>
+                <button (click)="openModal('cashModal')" class="bg-red-600 hover:bg-red-700 text-white rounded-xl py-2.5 text-xs font-bold shadow-sm col-span-1">Pagar</button>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- MODAL CLIENTE -->
+    @if (modals['clientModal']) {
+    <div class="fixed inset-0 z-50 bg-black/50 p-4 flex items-center justify-center backdrop-blur-sm">
+        <div class="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl border">
+            <div class="flex justify-between items-center pb-3 border-b">
+                <h3 class="font-bold text-lg text-gray-900">Seleccionar cliente</h3>
+                <button (click)="closeModal('clientModal')" class="text-xl font-bold text-gray-400 hover:text-gray-600">×</button>
+            </div>
+            <input class="w-full border rounded-xl px-4 py-2.5 mt-4 text-sm outline-none bg-gray-50 focus:bg-white" placeholder="Buscar por nombre o documento...">
+            <div class="mt-4 border rounded-xl p-3 cursor-pointer hover:bg-red-50 transition-colors" (click)="selectClient('María López', '52.345.678')">
+                <b class="text-sm text-gray-900">María López</b>
+                <p class="text-xs text-gray-500">CC 52.345.678</p>
+            </div>
+            <div class="mt-2 border rounded-xl p-3 cursor-pointer hover:bg-red-50 transition-colors" (click)="selectClient('Cliente mostrador', '222222222')">
+                <b class="text-sm text-gray-900">Cliente mostrador</b>
+                <p class="text-xs text-gray-500">General</p>
+            </div>
+        </div>
+    </div>
+    }
+
+    <!-- MODAL DESCUENTO -->
+    @if (modals['discountModal']) {
+    <div class="fixed inset-0 z-50 bg-black/50 p-4 flex items-center justify-center backdrop-blur-sm">
+        <div class="bg-white rounded-2xl w-full max-w-sm p-6 shadow-2xl border">
+            <div class="flex justify-between items-center pb-3 border-b">
+                <h3 class="font-bold text-lg text-gray-900">Aplicar descuento</h3>
+                <button (click)="closeModal('discountModal')" class="text-xl font-bold text-gray-400 hover:text-gray-600">×</button>
+            </div>
+            <div class="grid grid-cols-2 gap-3 mt-4">
+                <select [(ngModel)]="discountType" class="border rounded-xl p-2.5 text-xs outline-none bg-gray-50">
+                    <option value="percent">Porcentaje (%)</option>
+                    <option value="value">Valor fijo ($)</option>
+                </select>
+                <input [(ngModel)]="discountInput" type="number" value="0" class="border rounded-xl p-2.5 text-xs outline-none bg-gray-50">
+            </div>
+            <button (click)="applyDiscount()" class="w-full mt-5 bg-red-600 hover:bg-red-700 text-white rounded-xl py-3 font-bold text-xs transition-colors">Aplicar</button>
+        </div>
+    </div>
+    }
+
+    <!-- MODAL DOMICILIO -->
+    @if (modals['deliveryModal']) {
+    <div class="fixed inset-0 z-50 bg-black/50 p-4 flex items-center justify-center backdrop-blur-sm">
+        <div class="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl border">
+            <div class="flex justify-between items-center pb-3 border-b">
+                <h3 class="font-bold text-lg text-gray-900">Agregar domicilio</h3>
+                <button (click)="closeModal('deliveryModal')" class="text-xl font-bold text-gray-400 hover:text-gray-600">×</button>
+            </div>
+            <input [(ngModel)]="deliveryCost" type="number" placeholder="Valor del domicilio" class="w-full border rounded-xl px-4 py-2.5 mt-4 text-xs outline-none bg-gray-50">
+            <textarea [(ngModel)]="deliveryNote" class="w-full border rounded-xl px-4 py-2.5 mt-3 text-xs outline-none bg-gray-50" rows="3" placeholder="Instrucciones de entrega..."></textarea>
+            <button (click)="applyDelivery()" class="w-full mt-5 bg-red-600 hover:bg-red-700 text-white rounded-xl py-3 font-bold text-xs transition-colors">Guardar</button>
+        </div>
+    </div>
+    }
+
+    <!-- MODAL DE PAGO (EFECTIVO Y QR) -->
+    @if (modals['cashModal']) {
+    <div class="fixed inset-0 z-50 bg-black/50 p-4 flex items-center justify-center backdrop-blur-sm">
+        <div class="bg-white rounded-2xl w-full max-w-4xl max-h-[92vh] overflow-y-auto p-6 shadow-2xl border">
+            <div class="flex justify-between items-center pb-3 border-b">
+                <div>
+                    <h3 class="font-bold text-xl text-gray-900">Procesar pago</h3>
+                    <p class="text-xs text-gray-500">Seleccione el método de pago</p>
+                </div>
+                <button (click)="closeModal('cashModal')" class="text-xl font-bold text-gray-400 hover:text-gray-600">×</button>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-6 mt-5">
+                <div>
+                    <h4 class="font-bold text-xs uppercase text-gray-400 tracking-wider mb-3">Resumen de venta</h4>
+                    <div class="space-y-2 max-h-56 overflow-y-auto pr-1">
+                        @for (item of cart; track item.id_producto) {
+                        <div class="flex gap-2 items-center border-b pb-2 text-xs">
+                            <div class="w-8 h-8 bg-gray-50 border rounded grid place-items-center">▣</div>
+                            <div class="flex-1">
+                                <b class="text-gray-900">{{ item.name }}</b>
+                                <div class="text-[10px] text-gray-500">{{ item.qty }} × {{ item.price | currency:'COP':'symbol':'1.0-0' }}</div>
+                            </div>
+                            <b class="text-gray-900">{{ item.price * item.qty | currency:'COP':'symbol':'1.0-0' }}</b>
+                        </div>
+                        }
+                    </div>
+                    
+                    <div class="mt-4 bg-gray-50 rounded-xl p-4 border">
+                        <h4 class="font-bold text-xs text-gray-700">Cliente: {{ customer.nombre }}</h4>
+                        <div class="flex justify-between text-sm mt-3 pt-2 border-t">
+                            <b class="text-gray-900">Total a pagar</b>
+                            <b class="text-red-600 font-black text-base">{{ grandTotal | currency:'COP':'symbol':'1.0-0' }}</b>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-xs uppercase text-gray-400 tracking-wider mb-3">Medio de pago</h4>
+                    <select [(ngModel)]="paymentMethod" class="w-full border rounded-xl p-3 text-xs outline-none bg-gray-50 font-semibold">
+                        <option value="cash">Efectivo</option>
+                        <option value="qr">QR / Bre-B</option>
+                    </select>
+
+                    @if (paymentMethod === 'cash') {
+                    <div class="mt-4">
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">Monto recibido</label>
+                        <input [(ngModel)]="cashReceived" type="number" class="w-full border rounded-xl p-3 text-lg font-bold outline-none bg-gray-50 focus:bg-white" placeholder="0">
+                        
+                        <div class="mt-3 text-center bg-gray-900 text-white rounded-xl p-4 shadow-inner">
+                            <span class="text-xs text-gray-400 block">Cambio a devolver</span>
+                            <div class="text-3xl font-extrabold text-emerald-400 mt-1">{{ change | currency:'COP':'symbol':'1.0-0' }}</div>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-2 mt-4">
+                            <button (click)="addCash(1000)" class="border border-dashed rounded-xl p-2.5 hover:border-red-400 text-xs font-semibold">$ 1.000</button>
+                            <button (click)="addCash(2000)" class="border border-dashed rounded-xl p-2.5 hover:border-red-400 text-xs font-semibold">$ 2.000</button>
+                            <button (click)="addCash(5000)" class="border border-dashed rounded-xl p-2.5 hover:border-red-400 text-xs font-semibold">$ 5.000</button>
+                            <button (click)="addCash(10000)" class="border border-dashed rounded-xl p-2.5 hover:border-red-400 text-xs font-semibold">$ 10.000</button>
+                            <button (click)="addCash(20000)" class="border border-dashed rounded-xl p-2.5 hover:border-red-400 text-xs font-semibold">$ 20.000</button>
+                            <button (click)="addCash(50000)" class="border border-dashed rounded-xl p-2.5 hover:border-red-400 text-xs font-semibold">$ 50.000</button>
+                        </div>
+                    </div>
+                    }
+
+                    @if (paymentMethod === 'qr') {
+                    <div class="mt-4 text-center py-6 bg-gray-50 rounded-2xl border">
+                        <div class="mx-auto w-36 h-36 border-4 border-gray-900 bg-white grid place-items-center text-5xl shadow-sm">▦</div>
+                        <p class="font-bold mt-3 text-sm text-gray-900">SaintKofs POS</p>
+                        <p class="text-xs text-gray-500">Escanee para pagar por Bre-B / QR</p>
+                    </div>
+                    }
+
+                    <button (click)="finishPayment()" class="w-full mt-6 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl py-3 font-bold text-xs transition-colors shadow-sm">Confirmar pago</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+</section>
