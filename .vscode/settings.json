@@ -8,6 +8,7 @@
         "services",
         "config",
         "products",
-        "db"
+        "db",
+        "deploy"
     ]
 }
