@@ -12,8 +12,8 @@ services:
       - ./frontend:/app:z
       - /app/node_modules
     working_dir: /app
-  command: sh -c "npm install && npx ng serve --host 0.0.0.0 --port 4200 --disable-host-check"
-  environment:
+    command: sh -c "npm install && npx ng serve --host 0.0.0.0 --port 4200 --disable-host-check"
+    environment:
       - NODE_ENV=development
 
   # BACKEND: Servidor Web + PHP Nativo (Puerto 8080)
@@ -29,7 +29,6 @@ services:
       - DB_NAME=${DB_NAME} # 2. Debe ser igual a MYSQL_DATABASE.
       - DB_USER=${DB_USER} # 3. Debe ser igual a MYSQL_USER.
       - DB_PASS=${DB_PASS} # 4. Debe ser igual a MYSQL_PASSWORD.
-
     depends_on:
       - pos-db
     restart: always
@@ -41,7 +40,6 @@ services:
     # Reducir rango a local server
     ports:
       - "127.0.0.1:3306:3306"
-
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${DB_NAME}
