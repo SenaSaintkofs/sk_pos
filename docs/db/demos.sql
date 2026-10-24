@@ -52,7 +52,7 @@ INSERT INTO VENTA (id_usuario_cliente, fecha, subtotal, descuento_total, valor_e
 (3, '2026-10-23 11:00:00', 14400.00, 0.00, 5000.00, 19400.00, 'QR', 'Entregar en portería torre B', NULL, NULL);
 
 -- 8. INSERTAR DETALLES DE VENTA
-INSERT INTO DETALLE_VENTA (id_venta, id_producto, cantidad, precio_unitario, descuento_applied) VALUES
+INSERT INTO DETALLE_VENTA (id_venta, id_producto, cantidad, precio_unitario, descuento_aplicado) VALUES
 -- Detalles Venta 1
 (1, 1, 2, 3200.00, 0.00),
 (1, 2, 1, 11000.00, 0.00),

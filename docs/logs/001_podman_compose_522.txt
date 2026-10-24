@@ -1,0 +1,161 @@
+podman-compose up
+podman-compose version: 1.0.6
+['podman', '--version', '']
+using podman version: 4.9.3
+** excluding:  set()
+['podman', 'ps', '--filter', 'label=io.podman.compose.project=sk_pos', '-a', '--format', '{{ index .Labels "io.podman.compose.config-hash"}}']
+['podman', 'network', 'exists', 'sk_pos_default']
+podman create --name=sk_pos_angular_dev --label io.podman.compose.config-hash=77e6ab21be8c27de14ef5e9dc1dacac1e5d5fa267951e66bc2fa57c7145b13b7 --label io.podman.compose.project=sk_pos --label io.podman.compose.version=1.0.6 --label PODMAN_SYSTEMD_UNIT=podman-compose@sk_pos.service --label com.docker.compose.project=sk_pos --label com.docker.compose.project.working_dir=/home/ubuntu/sk_pos --label com.docker.compose.project.config_files=compose.yaml --label com.docker.compose.container-number=1 --label com.docker.compose.service=pos-frontend -e NODE_ENV=development -v /home/ubuntu/sk_pos/frontend:/app:z --net sk_pos_default --network-alias pos-frontend -p 4200:4200 -w /app docker.io/library/node:20-alpine sh -c npm install && npm run start
+4ef73136219c5a0e7ea1ed129c8918402aa77d0c481a7e1d4a00f25011ba6125
+exit code: 0
+podman volume inspect sk_pos_pos_db_data || podman volume create sk_pos_pos_db_data
+['podman', 'volume', 'inspect', 'sk_pos_pos_db_data']
+Error: no such volume sk_pos_pos_db_data
+['podman', 'volume', 'create', '--label', 'io.podman.compose.project=sk_pos', '--label', 'com.docker.compose.project=sk_pos', 'sk_pos_pos_db_data']
+['podman', 'volume', 'inspect', 'sk_pos_pos_db_data']
+['podman', 'network', 'exists', 'sk_pos_default']
+podman create --name=sk_pos_mysql --label io.podman.compose.config-hash=77e6ab21be8c27de14ef5e9dc1dacac1e5d5fa267951e66bc2fa57c7145b13b7 --label io.podman.compose.project=sk_pos --label io.podman.compose.version=1.0.6 --label PODMAN_SYSTEMD_UNIT=podman-compose@sk_pos.service --label com.docker.compose.project=sk_pos --label com.docker.compose.project.working_dir=/home/ubuntu/sk_pos --label com.docker.compose.project.config_files=compose.yaml --label com.docker.compose.container-number=1 --label com.docker.compose.service=pos-db -e MYSQL_ROOT_PASSWORD=Emergencia@99@scs -e MYSQL_DATABASE=pos_sistema -e MYSQL_USER=pos_user -e MYSQL_PASSWORD=CL4V3$1N$egura2026 -v sk_pos_pos_db_data:/var/lib/mysql:z -v /home/ubuntu/sk_pos/docs/db/datos.sql:/docker-entrypoint-initdb.d/01_estructura.sql:z -v /home/ubuntu/sk_pos/docs/db/demos.sql:/docker-entrypoint-initdb.d/02_demo.sql:z --net sk_pos_default --network-alias pos-db -p 127.0.0.1:3306:3306 --restart always docker.io/library/mysql:8.0
+56ca52696815e12839650a03808921ca296b4732e5123920faead1b4c241ce3b
+exit code: 0
+['podman', 'network', 'exists', 'sk_pos_default']
+podman create --name=sk_pos_php_backend --requires=sk_pos_mysql --label io.podman.compose.config-hash=77e6ab21be8c27de14ef5e9dc1dacac1e5d5fa267951e66bc2fa57c7145b13b7 --label io.podman.compose.project=sk_pos --label io.podman.compose.version=1.0.6 --label PODMAN_SYSTEMD_UNIT=podman-compose@sk_pos.service --label com.docker.compose.project=sk_pos --label com.docker.compose.project.working_dir=/home/ubuntu/sk_pos --label com.docker.compose.project.config_files=compose.yaml --label com.docker.compose.container-number=1 --label com.docker.compose.service=pos-backend -e DB_HOST=pos-db -e DB_NAME=pos_sistema -e DB_USER=pos_user -e DB_PASS=CL4V3$1N$egura2026 -v /home/ubuntu/sk_pos/backend:/var/www/html:z --net sk_pos_default --network-alias pos-backend -p 8080:8080 --restart always docker.io/trafex/php-nginx:latest
+7a85043dc38521a688b983b132465e53d68d117e16f5097460e6edf9e32c167a
+exit code: 0
+['podman', 'network', 'exists', 'sk_pos_default']
+podman create --name=sk_pos_phpmyadmin --requires=sk_pos_mysql --label io.podman.compose.config-hash=77e6ab21be8c27de14ef5e9dc1dacac1e5d5fa267951e66bc2fa57c7145b13b7 --label io.podman.compose.project=sk_pos --label io.podman.compose.version=1.0.6 --label PODMAN_SYSTEMD_UNIT=podman-compose@sk_pos.service --label com.docker.compose.project=sk_pos --label com.docker.compose.project.working_dir=/home/ubuntu/sk_pos --label com.docker.compose.project.config_files=compose.yaml --label com.docker.compose.container-number=1 --label com.docker.compose.service=pos-phpmyadmin -e PMA_HOST=pos-db -e PMA_USER=pos_user -e PMA_PASSWORD=CL4V3$1N$egura2026 --net sk_pos_default --network-alias pos-phpmyadmin -p 8081:80 --restart always docker.io/library/phpmyadmin:latest
+b55c060399088392357ea6cbff4e1bdc9d18277d4c9251781524d9b6003747e5
+exit code: 0
+podman start -a sk_pos_angular_dev
+podman start -a sk_pos_mysql
+[pos-db]         | 2026-10-24 02:24:54+00:00 [Note] [Entrypoint]: Entrypoint script for MySQL Server 8.0.46-1.el9 started.
+[pos-db]         | 2026-10-24 02:24:54+00:00 [Note] [Entrypoint]: Switching to dedicated user 'mysql'
+[pos-db]         | 2026-10-24 02:24:54+00:00 [Note] [Entrypoint]: Entrypoint script for MySQL Server 8.0.46-1.el9 started.
+[pos-db]         | 2026-10-24 02:24:54+00:00 [Note] [Entrypoint]: Initializing database files
+2026-10-24T02:24:54.893784Z 0 [Warning] [MY-011068] [Server] The syntax '--skip-host-cache' is deprecated and will be removed in a future release. Please use SET GLOBAL host_cache_size=0 instead.
+2026-10-24T02:24:54.893872Z 0 [System] [MY-013169] [Server] /usr/sbin/mysqld (mysqld 8.0.46) initializing of server in progress as process 75
+2026-10-24T02:24:54.906002Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+podman start -a sk_pos_php_backend
+2026-10-24T02:24:55.812527Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+[pos-backend]    | 2026-10-24 02:24:55,896 INFO supervisord started with pid 1
+podman start -a sk_pos_phpmyadmin
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 10.89.0.9. Set the 'ServerName' directive globally to suppress this message
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 10.89.0.9. Set the 'ServerName' directive globally to suppress this message
+[Sat Oct 24 02:24:56.670275 2026] [mpm_prefork:notice] [pid 1:tid 1] AH00163: Apache/2.4.69 (Debian) PHP/8.3.36 configured -- resuming normal operations
+[Sat Oct 24 02:24:56.670336 2026] [core:notice] [pid 1:tid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[pos-backend]    | 2026-10-24 02:24:56,898 INFO spawned: 'nginx' with pid 2
+[pos-backend]    | 2026-10-24 02:24:56,900 INFO spawned: 'php-fpm' with pid 3
+[24-Oct-2026 02:24:56] NOTICE: fpm is running, pid 3
+[24-Oct-2026 02:24:56] NOTICE: ready to handle connections
+2026-10-24T02:24:57.880516Z 6 [Warning] [MY-010453] [Server] root@localhost is created with an empty password ! Please consider switching off the --initialize-insecure option.
+[pos-backend]    | 2026-10-24 02:24:57,936 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+[pos-backend]    | 2026-10-24 02:24:57,936 INFO success: php-fpm entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+[pos-db]         | 2026-10-24 02:25:01+00:00 [Note] [Entrypoint]: Database files initialized
+[pos-db]         | 2026-10-24 02:25:01+00:00 [Note] [Entrypoint]: Starting temporary server
+2026-10-24T02:25:01.737947Z 0 [Warning] [MY-011068] [Server] The syntax '--skip-host-cache' is deprecated and will be removed in a future release. Please use SET GLOBAL host_cache_size=0 instead.
+2026-10-24T02:25:01.739043Z 0 [System] [MY-010116] [Server] /usr/sbin/mysqld (mysqld 8.0.46) starting as process 119
+2026-10-24T02:25:01.758966Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+2026-10-24T02:25:01.958190Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+2026-10-24T02:25:02.171132Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.
+2026-10-24T02:25:02.171168Z 0 [System] [MY-013602] [Server] Channel mysql_main configured to support TLS. Encrypted connections are now supported for this channel.
+2026-10-24T02:25:02.175414Z 0 [Warning] [MY-011810] [Server] Insecure configuration for --pid-file: Location '/var/run/mysqld' in the path is accessible to all OS users. Consider choosing a different directory.
+2026-10-24T02:25:02.197425Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Socket: /var/run/mysqld/mysqlx.sock
+2026-10-24T02:25:02.197502Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: '8.0.46'  socket: '/var/run/mysqld/mysqld.sock'  port: 0  MySQL Community Server - GPL.
+[pos-db]         | 2026-10-24 02:25:02+00:00 [Note] [Entrypoint]: Temporary server started.
+[pos-db]         | '/var/lib/mysql/mysql.sock' -> '/var/run/mysqld/mysqld.sock'
+Warning: Unable to load '/usr/share/zoneinfo/iso3166.tab' as time zone. Skipping it.
+Warning: Unable to load '/usr/share/zoneinfo/leap-seconds.list' as time zone. Skipping it.
+Warning: Unable to load '/usr/share/zoneinfo/leapseconds' as time zone. Skipping it.
+Warning: Unable to load '/usr/share/zoneinfo/tzdata.zi' as time zone. Skipping it.
+Warning: Unable to load '/usr/share/zoneinfo/zone.tab' as time zone. Skipping it.
+Warning: Unable to load '/usr/share/zoneinfo/zone1970.tab' as time zone. Skipping it.
+[pos-db]         | 2026-10-24 02:25:05+00:00 [Note] [Entrypoint]: Creating database pos_sistema
+[pos-db]         | 2026-10-24 02:25:05+00:00 [Note] [Entrypoint]: Creating user pos_user
+[pos-db]         | 2026-10-24 02:25:05+00:00 [Note] [Entrypoint]: Giving user pos_user access to schema pos_sistema
+[pos-db]         | 
+[pos-db]         | 2026-10-24 02:25:05+00:00 [Note] [Entrypoint]: /usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/01_estructura.sql
+[pos-db]         | 
+[pos-db]         | 
+[pos-db]         | 2026-10-24 02:25:06+00:00 [Note] [Entrypoint]: /usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/02_demo.sql
+ERROR 1054 (42S22) at line 55: Unknown column 'descuento_applied' in 'field list'
+exit code: 1
+[pos-frontend]   | 
+[pos-frontend]   | up to date, audited 663 packages in 2m
+[pos-frontend]   | 
+[pos-frontend]   | 138 packages are looking for funding
+[pos-frontend]   |   run `npm fund` for details
+[pos-frontend]   | 
+[pos-frontend]   | 11 vulnerabilities (5 moderate, 6 high)
+[pos-frontend]   | 
+[pos-frontend]   | To address issues that do not require attention, run:
+[pos-frontend]   |   npm audit fix
+[pos-frontend]   | 
+[pos-frontend]   | To address all issues (including breaking changes), run:
+[pos-frontend]   |   npm audit fix --force
+[pos-frontend]   | 
+[pos-frontend]   | Run `npm audit` for details.
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 12.2.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.1
+npm notice To update run: npm install -g npm@12.2.1
+npm notice
+[pos-frontend]   | 
+[pos-frontend]   | > frontend@0.18.1 start
+[pos-frontend]   | > ng serve --host=0.0.0.0 --port=4200
+[pos-frontend]   | 
+
+Warning: This is a simple server for use in testing or debugging Angular applications
+locally. It hasn't been reviewed for security issues.
+
+Binding this server to an open connection can result in compromising your application or
+computer. Using a different host than the one passed to the "--host" flag might result in
+websocket connection issues.
+    
+[pos-frontend]   | ❯ Building...
+[pos-frontend]   | ✔ Building...
+[pos-frontend]   | Initial chunk files | Names         |  Raw size
+[pos-frontend]   | main.js             | main          | 303.48 kB | 
+[pos-frontend]   | styles.css          | styles        |   1.59 kB | 
+[pos-frontend]   | 
+[pos-frontend]   |                     | Initial total | 305.07 kB
+[pos-frontend]   | 
+[pos-frontend]   | Application bundle generation complete. [4.398 seconds] - 2026-10-24T02:26:50.699Z
+[pos-frontend]   | 
+▲ [WARNING] NG8113: RouterLink is not used within the template of Main [plugin angular-compiler]
+
+    src/app/estructura/main.ts:9:26:
+      9 │   imports: [RouterModule, RouterLink, Header, Nav, Footer],
+        ╵                           ~~~~~~~~~~
+
+
+[pos-frontend]   | Watch mode enabled. Watching for file changes...
+[pos-frontend]   | NOTE: Raw file sizes do not reflect development server per-request transformations.
+[pos-frontend]   |   ➜  Local:   http://localhost:4200/
+[pos-frontend]   |   ➜  Network: http://10.89.0.6:4200/
+^CTraceback (most recent call last):
+  File "/usr/bin/podman-compose", line 33, in <module>
+    sys.exit(load_entry_point('podman-compose==1.0.6', 'console_scripts', 'podman-compose')())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/podman_compose.py", line 2941, in main
+    podman_compose.run()
+  File "/usr/lib/python3/dist-packages/podman_compose.py", line 1423, in run
+    cmd(self, args)
+  File "/usr/lib/python3/dist-packages/podman_compose.py", line 1754, in wrapped
+    return func(*args, **kw)
+           ^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/podman_compose.py", line 2117, in compose_up
+    thread.join(timeout=1.0)
+  File "/usr/lib/python3.12/threading.py", line 1151, in join
+    self._wait_for_tstate_lock(timeout=max(timeout, 0))
+  File "/usr/lib/python3.12/threading.py", line 1167, in _wait_for_tstate_lock
+    if lock.acquire(block, timeout):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+
+ubuntu@saintkofs-vnic:~/sk_pos$ Error: unable to start container 7a85043dc38521a688b983b132465e53d68d117e16f5097460e6edf9e32c167a: attaching to container 7a85043dc38521a688b983b132465e53d68d117e16f5097460e6edf9e32c167a: write /dev/stdout: broken pipe
+[Sat Oct 24 02:30:30.305649 2026] [mpm_prefork:notice] [pid 1:tid 1] AH00169: caught SIGTERM, shutting down
+npm error path /app
+npm error command failed
+npm error signal SIGINT
+npm error command sh -c ng serve --host=0.0.0.0 --port=4200
+npm error A complete log of this run can be found in: /root/.npm/_logs/2026-10-24T02_26_45_227Z-debug-0.log
+^C
