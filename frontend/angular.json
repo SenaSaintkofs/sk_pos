@@ -58,7 +58,8 @@
           "options": {
             "allowedHosts": [
               "demo-pos.saintkofs.pw",
-              "localhost"
+              "localhost",
+              ".saintkofs.pw"
             ]
           },
           "configurations": {
@@ -66,7 +67,12 @@
               "buildTarget": "frontend:build:production"
             },
             "development": {
-              "buildTarget": "frontend:build:development"
+              "buildTarget": "frontend:build:development",
+              "allowedHosts": [
+                "demo-pos.saintkofs.pw",
+                "localhost",
+                ".saintkofs.pw"
+              ]
             }
           },
           "defaultConfiguration": "development"
