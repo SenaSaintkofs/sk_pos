@@ -3,7 +3,7 @@ USE pos_sistema;
 -- 1. INSERTAR USUARIOS (Clientes, Empleados y Administradores)
 INSERT INTO USUARIO (correo, clave, rol, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, numero_documento, telefono) VALUES
 ('demo@saintkofs.pw', '$2y$12$kdFOR7erz35mEeYKIeRgJOIBjkFI5VQB0efV06E.0CXv8Vw9.LBfS', 'ADMINISTRADOR', 'Demo', 'Santiago', 'Castro', 'Soto', '1054567890', '3214567890'),
-('usuario@sistema.pw', '$2y$12$kdFOR7erz35mEeYKIeRgJOIBjkFI5VQB0efV06E.0CXv8Vw9.LBfS', 'EMPLEADO', 'Cajero', NULL, 'Castro', 'Rudas', '50607080', '3014567890'),
+('usuario@saintkofs.pw', '$2y$12$kdFOR7erz35mEeYKIeRgJOIBjkFI5VQB0efV06E.0CXv8Vw9.LBfS', 'EMPLEADO', 'Cajero', NULL, 'Castro', 'Rudas', '50607080', '3014567890'),
 ('santiago.cliente@correo.com', '$2y$12$kdFOR7erz35mEeYKIeRgJOIBjkFI5VQB0efV06E.0CXv8Vw9.LBfS', 'CLIENTE', 'Saint', 'Kofs', 'Salazar', 'Cano', '80901020', '3234567890'),
 ('otro.cliente@correo.com', '$2y$12$kdFOR7erz35mEeYKIeRgJOIBjkFI5VQB0efV06E.0CXv8Vw9.LBfS', 'CLIENTE', 'Don', 'Cliente', 'Castro', NULL, '40302010', '3334567890');
 

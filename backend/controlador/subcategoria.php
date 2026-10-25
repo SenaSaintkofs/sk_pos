@@ -6,6 +6,8 @@
     require_once('../modelo/conexion.php');
     require_once('../modelo/subcategoria.php');
 
+    $vec = [];
+
     global $conexion;
 
     $control = $_GET['control'];
