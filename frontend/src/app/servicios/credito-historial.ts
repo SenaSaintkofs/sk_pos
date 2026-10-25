@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { API_CONFIG } from '../config/api';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CreditoHistorial {
-
-  url = "https://demo-pos.saintkofs/controlador/creditoHistorial.php";
-
+  private url = `${API_CONFIG.baseUrl}/creditoHistorial.php`;
+  
   constructor(private http: HttpClient){};
 
   consulta() {

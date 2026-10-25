@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { API_CONFIG } from '../config/api';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Venta {
-
-  url = "https://demo-pos.saintkofs/controlador/venta.php";
+  private url = `${API_CONFIG.baseUrl}/venta.php`;
 
   constructor(private http: HttpClient){};
 
