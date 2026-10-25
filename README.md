@@ -12,11 +12,11 @@
 ---
 
 ## Índice de Contenidos
-- [Características Destacadas](#características-destacadas)
+- [Características Destacadas](#características)
 - [Stack Tecnológico](#stack-tecnológico)
 - [Optimizaciones de Arquitectura](#optimizaciones-de-arquitectura)
 - [Despliegue y Pruebas](#despliegue-y-pruebas)
-- [Ejecución Local con Contenedores (Podman / Docker)](#ejecución-local-Ejecución-Local (Run Locally))
+- [Ejecución Local con Contenedores (Podman / Docker)](#ejecución-local-run-locally)
 - [Licencia del Proyecto](#licencia-del-proyecto)
 
 
