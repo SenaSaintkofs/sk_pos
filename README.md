@@ -1,5 +1,4 @@
 # Saintkofs - SKPOS
-
 ![Angular](https://img.shields.io/badge/angular-%23DD0031.svg?style=for-the-badge&logo=angular&logoColor=white)
 ![PHP](https://img.shields.io/badge/php-%23777BB4.svg?style=for-the-badge&logo=php&logoColor=white)
 ![MySQL](https://img.shields.io/badge/mysql-%234479A1.svg?style=for-the-badge&logo=mysql&logoColor=white)
@@ -9,6 +8,7 @@
 > **NOTE**
 > Sistema de información Web tipo POS (Point of Sale) diseñado para la automatización, control operacional, gestión de inventarios y facturación en tiempo real para microcomercios. Desarrollado como proyecto de grado bajo estándares técnicos.
 
+![Logo SKPOS](./frontend/public/logo.png)
 ---
 
 ## Índice de Contenidos
@@ -18,7 +18,7 @@
 - [Despliegue y Pruebas](#-despliegue-y-pruebas)
 - [Ejecución Local con Contenedores (Podman / Docker)](#-ejecución-local-Ejecución-Local (Run Locally))
 - [Licencia del Proyecto](#-licencia-del-proyecto)
-- 
+
 
 ---
 
