@@ -97,6 +97,6 @@ Una vez completada la inicialización de los servicios:
 
 Este proyecto se encuentra registrado bajo la Licencia **MIT**. Es de código abierto y uso completamente libre para fines académicos, de estudio y desarrollo de software.
 
-> [![GitHub repo size](https://img.shields.io/github/repo-size/SenaSaintkofs/sk_pos?style=flat-square)](https://github.com/SenaSaintkofs/sk_pos)
-> [![GitHub last commit](https://img.shields.io/github/last-commit/SenaSaintkofs/sk_pos?style=flat-square)](https://github.com/SenaSaintkofs/sk_pos)
-> [![GitHub license](https://img.shields.io/github/license/SenaSaintkofs/sk_pos?style=flat-square)](https://github.com/SenaSaintkofs/sk_pos)
+> [![GitHub repo size](https://img.shields.io/github/repo-size/SenaSaintkofs/sk_pos?style=flat-square&cacheSeconds=1)](https://github.com/SenaSaintkofs/sk_pos)
+> [![GitHub last commit](https://img.shields.io/github/last-commit/SenaSaintkofs/sk_pos?style=flat-square&cacheSeconds=1)](https://github.com/SenaSaintkofs/sk_pos)
+> [![GitHub license](https://img.shields.io/github/license/SenaSaintkofs/sk_pos?style=flat-square&cacheSeconds=1)](https://github.com/SenaSaintkofs/sk_pos)
