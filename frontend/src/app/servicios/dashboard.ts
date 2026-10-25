@@ -5,8 +5,8 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class Dashboard { // 👈 Nombre claro del servicio
-  private url = "http://localhost:8080/controlador/dashboard.php";
+export class Dashboard {
+  private url = "https://demo-pos.saintkofs/controlador/dashboard.php";
 
   constructor(private http: HttpClient) {}
 

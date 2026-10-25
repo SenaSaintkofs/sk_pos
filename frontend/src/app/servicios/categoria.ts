@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 })
 export class Categoria {
 
-  url = "http://localhost:8080/controlador/categoria.php";
+  url = "https://demo-pos.saintkofs/controlador/categoria.php";
 
   constructor(private http: HttpClient){};
 

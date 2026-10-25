@@ -1,8 +1,8 @@
 <?php
-    // Lineas importantes para permiso CORS
-    header('Access-Control-Allow-Origin: *');
-    header('Access-Control-Allow-Headers: Origin; X-Requested-With, Content-Type, Accept');
+    // cargar CORS
+    require_once('config/cors.php');
 
+    // cargar modelos
     require_once('../modelo/conexion.php');
     require_once('../modelo/detalleVenta.php');
 

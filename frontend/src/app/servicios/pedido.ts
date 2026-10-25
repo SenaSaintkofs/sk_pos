@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class Pedido {
-  private url = "http://localhost:8080/controlador/pedido.php";
+  private url = "https://demo-pos.saintkofs/controlador/pedido.php";
   private urlProducto = "http://localhost:8080/controlador/producto.php";
   private urlProveedor = "http://localhost:8080/controlador/proveedor.php";
 
