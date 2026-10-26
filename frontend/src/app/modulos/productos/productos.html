@@ -78,6 +78,12 @@
                         {<span class="text-gray-300">▣</span>}
                     </div>
                     <p class="text-xs text-gray-400 mt-2 text-center">Vista previa del artículo en el catálogo del POS.</p>
+                    <label>
+                        <span class="text-sm font-semibold text-gray-700">Imagen del producto</span>
+                        <input [(ngModel)]="objProducto.imagen_url" 
+                               class="mt-1 w-full border rounded-xl px-4 py-2.5 bg-gray-50 focus:bg-white transition-all text-sm outline-none" 
+                               placeholder="URL de la imagen">
+                    </label>
                 </div>
 
                 <!-- FORMULARIO -->
@@ -87,12 +93,6 @@
                         <input [(ngModel)]="objProducto.nombre" 
                                class="mt-1 w-full border rounded-xl px-4 py-2.5 bg-gray-50 focus:bg-white transition-all text-sm outline-none" 
                                placeholder="Ej. Arroz Diana 500g">
-                    </label>
-                    <label>
-                        <span class="text-sm font-semibold text-gray-700">Imagen del producto</span>
-                        <input [(ngModel)]="objProducto.imagen_url" 
-                               class="mt-1 w-full border rounded-xl px-4 py-2.5 bg-gray-50 focus:bg-white transition-all text-sm outline-none" 
-                               placeholder="URL de la imagen">
                     </label>
                     <label>
                         <span class="text-sm font-semibold text-gray-700">Código de barras</span>

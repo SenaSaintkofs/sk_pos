@@ -23,11 +23,11 @@ INSERT INTO PROVEEDOR (nit, nombre, telefono) VALUES
 -- 4. INSERTAR PRODUCTOS
 -- El precio_venta es superior al costo_compra para mantener lógica de negocio
 INSERT INTO PRODUCTO (id_categoria, codigo_barras, nombre, stock, unidad_medida, costo_compra, precio_venta, controla_stock) VALUES
-(1, '7701234567890', 'Arroz Blanco 1kg', 100, 'UNIDAD', 2500.00, 3200.00, TRUE),
-(1, '7709876543210', 'Aceite de Girasol 1L', 50, 'UNIDAD', 8500.00, 11000.00, TRUE),
-(2, '7702223334445', 'Gaseosa Cola 2L', 80, 'UNIDAD', 3500.00, 4800.00, TRUE),
-(3, '7705556667778', 'Leche Entera 1L', 120, 'UNIDAD', 2800.00, 3600.00, TRUE),
-(4, '7708889990001', 'Detergente en Polvo 1kg', 40, 'UNIDAD', 6000.00, 8200.00, TRUE);
+(1, '7701234567890', 'Arroz Blanco 1kg', 100, 'UNIDAD', 2500.00, 3200.00, TRUE, 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500'),
+(1, '7709876543210', 'Aceite de Girasol 1L', 50, 'UNIDAD', 8500.00, 11000.00, TRUE, 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=500'),
+(2, '7702223334445', 'Gaseosa Cola 2L', 80, 'UNIDAD', 3500.00, 4800.00, TRUE, 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500'),
+(3, '7705556667778', 'Leche Entera 1L', 120, 'UNIDAD', 2800.00, 3600.00, TRUE, 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=500'),
+(4, '7708889990001', 'Detergente en Polvo 1kg', 40, 'UNIDAD', 6000.00, 8200.00, TRUE, 'https://images.unsplash.com/photo-1585421514284-efb74c2b69ba?w=500');
 
 -- 5. INSERTAR PEDIDOS (Compras a proveedores)
 -- Pedido 1: A Distribuidora Alimentos (Arroz y Aceite) -> Total: (100*2500) + (50*8500) = 250000 + 425000 = 675000
