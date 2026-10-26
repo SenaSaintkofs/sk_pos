@@ -107,7 +107,8 @@ export class Ventas implements OnInit {
         price: parseFloat(product.precio_venta) || 0,
         stock: product.stock,
         qty: 1,
-        code: product.codigo_barras || 'S/C'
+        code: product.codigo_barras || 'S/C',
+        imagen_url: product.imagen_url || null
       });
     }
   }

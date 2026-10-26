@@ -25,6 +25,7 @@
         public function insertar($params) {
             $id_cliente = (!empty($params->id_usuario_cliente)) ? intval($params->id_usuario_cliente) : "NULL";
             
+            mysqli_begin_transaction($this->conexion); // Iniciar transacción 
             $sql = "INSERT INTO VENTA (id_usuario_cliente, subtotal, descuento_total, valor_envio, total, tipo_pago, comentario_envio, monto_recibido, cambio) 
                     VALUES ($id_cliente, $params->subtotal, $params->descuento_total, $params->valor_envio, $params->total, '$params->tipo_pago', '$params->comentario_envio', $params->monto_recibido, $params->cambio)";
             
@@ -41,19 +42,33 @@
                         // Insertar en DETALLE_VENTA
                         $sqlDetalle = "INSERT INTO DETALLE_VENTA (id_venta, id_producto, cantidad, precio_unitario, descuento_aplicado) 
                                     VALUES ($id_venta, $id_producto, $cantidad, $precio_unitario, $descuento_aplicado)";
-                        mysqli_query($this->conexion, $sqlDetalle);
-
+                        if (!mysqli_query($this->conexion, $sqlDetalle)) {
+                            mysqli_rollback($this->conexion); // Revertir transacción si falla
+                            $vec = [];
+                            $vec['resultado'] = "error";
+                            $vec['mensaje'] = "No se inserto el detalle de venta: " . mysqli_error($this->conexion);
+                            return $vec;
+                        }
+                        
                         // Descontar stock del producto
                         $sqlStock = "UPDATE PRODUCTO SET stock = stock - $cantidad WHERE id_producto = $id_producto";
-                        mysqli_query($this->conexion, $sqlStock);
+                        if (!mysqli_query($this->conexion, $sqlStock)) {
+                            mysqli_rollback($this->conexion); // Revertir transacción si falla
+                            $vec = [];
+                            $vec['resultado'] = "error";
+                            $vec['mensaje'] = "No se actualizo el stock: " . mysqli_error($this->conexion);
+                            return $vec;
+                        }
                     }
                 }
 
+                mysqli_commit($this->conexion); // Confirmar transacción
                 $vec = [];
                 $vec['resultado'] = "ok";
                 $vec['mensaje'] = "Se ha insertado el registro y actualizado el stock";
                 return $vec;
             } else {
+                mysqli_rollback($this->conexion); // Revertir transacción si falla
                 $vec = [];
                 $vec['resultado'] = "error";
                 $vec['mensaje'] = "No se inserto el registro de venta: " . mysqli_error($this->conexion);
