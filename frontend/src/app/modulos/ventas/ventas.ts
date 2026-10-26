@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Producto } from '../../servicios/producto';
 import { Venta } from '../../servicios/venta';
+import { Usuario } from '../../servicios/usuario';
 
 @Component({
   selector: 'app-ventas',
@@ -17,11 +18,12 @@ export class Ventas implements OnInit {
   buscarProducto: string = '';
 
   // Cliente por defecto
-  customer = {
+  customer: { id_usuario: number | null; nombre: string; documento: string } = {
+    id_usuario: null,
     nombre: 'Cliente mostrador',
     documento: '222222222'
   };
-
+  clientes: any[] = []; // Lista de clientes para el modal
   // Descuento y Domicilio
   discountType: 'percent' | 'value' = 'percent';
   discountInput: number = 0;
@@ -44,11 +46,13 @@ export class Ventas implements OnInit {
   constructor(
     private sProducto: Producto,
     private sVenta: Venta,
+    private sUsuario: Usuario,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.cargarProductos();
+    this.cargarClientes();
   }
 
   cargarProductos(): void {
@@ -58,6 +62,17 @@ export class Ventas implements OnInit {
         this.cdr.detectChanges();
       },
       error: (err) => console.error('Error al cargar productos:', err)
+    });
+  }
+
+  cargarClientes(): void {
+    this.sUsuario.consulta().subscribe({
+      next: (res: any) => {
+        if (Array.isArray(res)) {
+          this.clientes = res;
+        }
+      },
+      error: (err) => console.error('Error al cargar clientes:', err)
     });
   }
 
@@ -168,8 +183,8 @@ export class Ventas implements OnInit {
     this.closeModal('deliveryModal');
   }
 
-  selectClient(nombre: string, doc: string): void {
-    this.customer = { nombre, documento: doc };
+  selectClient(id: number | null, nombre: string, doc: string): void {
+    this.customer = { id_usuario: id, nombre, documento: doc };
     this.closeModal('clientModal');
   }
 
@@ -185,6 +200,7 @@ export class Ventas implements OnInit {
     }
 
     const datosVenta = {
+      id_usuario_cliente: this.customer.id_usuario,
       subtotal: this.subtotal,
       descuento_total: this.discountAmount,
       valor_envio: this.deliveryCost,
