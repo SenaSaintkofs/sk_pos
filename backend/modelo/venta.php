@@ -28,13 +28,37 @@
             $sql = "INSERT INTO VENTA (id_usuario_cliente, subtotal, descuento_total, valor_envio, total, tipo_pago, comentario_envio, monto_recibido, cambio) 
                     VALUES ($id_cliente, $params->subtotal, $params->descuento_total, $params->valor_envio, $params->total, '$params->tipo_pago', '$params->comentario_envio', $params->monto_recibido, $params->cambio)";
             
-            mysqli_query($this->conexion, $sql) or die("No se inserto el registro de venta: " . mysqli_error($this->conexion));
+            if (mysqli_query($this->conexion, $sql)) {
+                $id_venta = mysqli_insert_id($this->conexion);
 
-            $vec = [];
-            $vec['resultado'] = "ok";
-            $vec['mensaje'] = "Se ha insertado el registro";
+                if (isset($params->productos) && is_array($params->productos)) {
+                    foreach ($params->productos as $prod) {
+                        $id_producto = intval($prod->id_producto);
+                        $cantidad = intval($prod->qty);
+                        $precio_unitario = floatval($prod->price);
+                        $descuento_aplicado = 0.00; 
 
-            return $vec;
+                        // Insertar en DETALLE_VENTA
+                        $sqlDetalle = "INSERT INTO DETALLE_VENTA (id_venta, id_producto, cantidad, precio_unitario, descuento_aplicado) 
+                                    VALUES ($id_venta, $id_producto, $cantidad, $precio_unitario, $descuento_aplicado)";
+                        mysqli_query($this->conexion, $sqlDetalle);
+
+                        // Descontar stock del producto
+                        $sqlStock = "UPDATE PRODUCTO SET stock = stock - $cantidad WHERE id_producto = $id_producto";
+                        mysqli_query($this->conexion, $sqlStock);
+                    }
+                }
+
+                $vec = [];
+                $vec['resultado'] = "ok";
+                $vec['mensaje'] = "Se ha insertado el registro y actualizado el stock";
+                return $vec;
+            } else {
+                $vec = [];
+                $vec['resultado'] = "error";
+                $vec['mensaje'] = "No se inserto el registro de venta: " . mysqli_error($this->conexion);
+                return $vec;
+            }
         }
 
         public function editar($id, $params) {
