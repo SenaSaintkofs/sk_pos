@@ -23,6 +23,6 @@ export class DetalleVenta {
   }
 
   eliminar(id: number) {
-    return this.http.get(`{this.url}?control=?editar&id=${id}`); 
+    return this.http.get(`{this.url}?control=?eliminar&id=${id}`); 
   }
 }

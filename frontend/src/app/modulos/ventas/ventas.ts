@@ -69,7 +69,8 @@ export class Ventas implements OnInit {
     this.sUsuario.consulta().subscribe({
       next: (res: any) => {
         if (Array.isArray(res)) {
-          this.clientes = res;
+          this.clientes = res.filter(u => u.rol === 'CLIENTE'); // Filtrar solo clientes
+          this.cdr.detectChanges();
         }
       },
       error: (err) => console.error('Error al cargar clientes:', err)
