@@ -5,15 +5,17 @@
   </div>
 } @else {
 
-  <div class="dashboard-container p-6">
-    <header class="mb-6">
-      <h1 class="text-2xl font-bold">Bienvenido, {{ currentUser.nombre }}</h1>
-      <span class="text-xs text-gray-500">Rol: {{ currentUser.rol }}</span>
+  <div class="dashboard-container p-6 space-y-6">
+    <header class="bg-white border rounded-2xl p-5 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">Bienvenido, {{ currentUser.nombre }}</h1>
+        <span class="text-xs text-gray-500">Rol activo: <span class="font-bold text-red-600 uppercase">{{ currentUser.rol }}</span></span>
+      </div>
     </header>
 
     <!-- SECCIÓN DE ADMINISTRADOR: KPIs, GRÁFICAS Y CATEGORÍAS -->
     @if (canViewFullDashboard) {
-      <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4 mb-6">
+      <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         @for (metric of metrics; track metric.title) {
           <div class="card-hover rounded-2xl border bg-white p-5 soft-shadow">
             <div class="flex justify-between items-center">
@@ -25,9 +27,7 @@
               </span>
             </div>
             <div class="mt-4 text-2xl font-black text-gray-800">{{ metric.value }}</div>
-            <p class="mt-1 text-xs font-semibold" [class.text-emerald-600]="metric.title !== 'Stock bajo'" [class.text-amber-600]="metric.title === 'Stock bajo'">
-              {{ metric.change }}
-            </p>
+            <p class="mt-1 text-xs font-semibold text-emerald-600">{{ metric.change }}</p>
           </div>
         }
       </section>
@@ -35,17 +35,24 @@
       <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         <!-- Gráfica Semanal -->
         <div class="rounded-2xl border bg-white p-5 lg:col-span-2 soft-shadow">
-          <h3 class="font-bold">Ventas de la semana</h3>
-          <div class="mt-6 flex h-56 items-end gap-3 sm:gap-6">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-gray-900">Ventas de la semana</h3>
+            <span class="text-xs bg-gray-100 text-gray-600 font-semibold px-2.5 py-1 rounded-lg">Cierre gerencial</span>
+          </div>
+
+          <div class="flex h-60 items-end gap-3 sm:gap-6 pt-6 px-2 border-b border-gray-100 pb-2">
             @for (bar of weeklySales; track bar.day) {
-              <div class="flex flex-1 flex-col items-center gap-2 group relative">
+              <div class="flex flex-1 flex-col items-center gap-1 h-full justify-end">
+                
+                <!-- Monto fijo visible permanentemente arriba de la barra -->
+                <span class="text-[10px] font-bold text-gray-600 whitespace-nowrap mb-1">
+                  {{ bar.amount | currency:'COP':'symbol':'1.0-0' }}
+                </span>
+
                 <div class="w-full max-w-12 rounded-t-lg transition-all duration-300"
                      [style.height.%]="bar.percentage"
                      [class.bg-red-500]="!bar.isToday"
                      [class.bg-red-700]="bar.isToday">
-                  <span class="absolute hidden group-hover:block bg-gray-800 text-white text-[10px] p-1.5 rounded -top-8 left-1/2 transform -translate-x-1/2 whitespace-nowrap z-10 shadow-md">
-                    {{ bar.amount | currency:'COP':'symbol':'1.0-0' }}
-                  </span>
                 </div>
                 <span class="text-[11px] font-medium" [class.text-red-600]="bar.isToday" [class.text-gray-500]="!bar.isToday">
                   {{ bar.day }}

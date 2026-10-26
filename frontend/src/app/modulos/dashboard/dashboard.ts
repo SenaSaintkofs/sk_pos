@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { Dashboard } from '../../servicios/dashboard'; // Asegúrate de que tu servicio se llame DashboardService
+import { Dashboard } from '../../servicios/dashboard';
 
 interface MetricCard {
   title: string;
@@ -79,7 +79,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser.nombre = sessionStorage.getItem('nombre') || 'Usuario';
-    this.currentUser.rol = sessionStorage.getItem('rol') || 'ADMINISTRADOR';
+    this.currentUser.rol = sessionStorage.getItem('rol') || 'EMPLEADO';
     const rol = this.currentUser.rol;
     
     this.canViewFullDashboard = (rol === 'ADMINISTRADOR');
