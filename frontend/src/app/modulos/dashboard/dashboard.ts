@@ -91,9 +91,11 @@ export class DashboardComponent implements OnInit {
     this.canViewDashboardAtAll = (rol === 'ADMINISTRADOR' || rol === 'EMPLEADO' || rol === 'CLIENTE');
 
     if (this.canViewFullDashboard) {
-      this.cargarCatalogoProductos();
-    } else {
-      this.cargarDatosReales();
+      if (rol === 'CLIENTE') {
+        this.cargarCatalogoProductos();
+      } else {
+        this.cargarDatosReales();
+      }
     }
   }
 

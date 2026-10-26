@@ -25,7 +25,7 @@
 
         <!-- Grid de Productos (Solo lectura) -->
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          @for (prod of catalogoProductos; track prod.id_producto) {
+          @for (prod of filtrarProductos(); track prod.id_producto) {
           <div class="bg-white border rounded-2xl p-4 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
               <div>
                   <div class="h-36 bg-gray-50 rounded-xl flex items-center justify-center text-4xl relative overflow-hidden border">
