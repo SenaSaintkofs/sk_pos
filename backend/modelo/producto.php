@@ -33,10 +33,11 @@
 
         public function insertar($params) {
             $controla_stock = isset($params->controla_stock) && $params->controla_stock ? 1 : 0;
-            $imagen = isset($params->imagen_url) ? $params->imagen_url : '';
-
+            $imagen = isset($params->imagen_url) ? $params->imagen_url : 'NULL';
+            // S/N codigo, se añade null para evitar duplicidad
+            $codigo_barras = isset($params->codigo_barras) ? $params->codigo_barras : 'NULL';
             $sql = "INSERT INTO PRODUCTO (id_categoria, codigo_barras, nombre, stock, unidad_medida, costo_compra, precio_venta, controla_stock, imagen_url) 
-                    VALUES ($params->id_categoria, '$params->codigo_barras', '$params->nombre', $params->stock, '$params->unidad_medida', $params->costo_compra, $params->precio_venta, $controla_stock, '$imagen')";
+                    VALUES ($params->id_categoria, '$codigo_barras', '$params->nombre', $params->stock, '$params->unidad_medida', $params->costo_compra, $params->precio_venta, $controla_stock, '$imagen')";
             
             mysqli_query($this->conexion, $sql) or die("No se inserto el registro");
 
@@ -48,10 +49,10 @@
 
         public function editar($id, $params) {
             $controla_stock = isset($params->controla_stock) && $params->controla_stock ? 1 : 0;
-            $imagen = isset($params->imagen_url) ? $params->imagen_url : '';
+            $imagen = isset($params->imagen_url) ? $params->imagen_url : 'NULL';
 
             $sql = "UPDATE PRODUCTO SET 
-                        id_categoria = $params->id_categoria, codigo_barras = '$params->codigo_barras', nombre = '$params->nombre', stock = $params->stock, unidad_medida = '$params->unidad_medida', costo_compra = $params->costo_compra, precio_venta = $params->precio_venta, controla_stock = $controla_stock, imagen_url = '$imagen' 
+                        id_categoria = $params->id_categoria, codigo_barras = 'codigo_barras', nombre = '$params->nombre', stock = $params->stock, unidad_medida = '$params->unidad_medida', costo_compra = $params->costo_compra, precio_venta = $params->precio_venta, controla_stock = $controla_stock, imagen_url = 'imagen' 
                     WHERE id_producto = $id";
                     
             mysqli_query($this->conexion, $sql) or die("No se edito el registro");
