@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-estado-404',
@@ -7,4 +7,15 @@ import { RouterLink } from '@angular/router';
   templateUrl: './estado-404.html',
   styleUrl: './estado-404.css',
 })
-export class Estado404 {}
+export class Estado404 {
+  constructor(private router: Router) {}
+
+  redirigirInicio() {
+    const idUser = sessionStorage.getItem('id');
+    if (idUser) {
+      this.router.navigate(['dashboard']);
+    } else {
+      this.router.navigate(['login']);
+    }
+  }
+}

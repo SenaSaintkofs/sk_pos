@@ -2,7 +2,8 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Dashboard } from '../../servicios/dashboard';
-
+import { Producto } from '../../servicios/producto';
+import { FormsModule } from '@angular/forms';
 interface MetricCard {
   title: string;
   value: string;
@@ -43,7 +44,7 @@ interface QuickTile {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -62,6 +63,9 @@ export class DashboardComponent implements OnInit {
   public categories: Category[] = [];
   public latestSales: Sale[] = [];
 
+  public catalogoProductos: any[] = [];
+  public buscarProducto: string = '';
+
   public quickAccess: QuickTile[] = [
     { title: 'Ventas', desc: 'Registrar ventas', iconPath: 'M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z', progress: 85 }, 
     { title: 'Productos', desc: 'Catálogo e Inventario', iconPath: 'm3 7 9-4 9 4-9 4-9-4Zm0 0v10l9 4 9-4V7m-9 4v10', progress: 40 }, 
@@ -74,6 +78,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     private router: Router,
     private sDashboard: Dashboard,
+    private sProducto: Producto,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -86,6 +91,8 @@ export class DashboardComponent implements OnInit {
     this.canViewDashboardAtAll = (rol === 'ADMINISTRADOR' || rol === 'EMPLEADO' || rol === 'CLIENTE');
 
     if (this.canViewFullDashboard) {
+      this.cargarCatalogoProductos();
+    } else {
       this.cargarDatosReales();
     }
   }
@@ -95,56 +102,73 @@ export class DashboardComponent implements OnInit {
       next: (res: any) => {
         if (!res) return;
 
-        this.metrics = [
-          { 
-            title: 'Ventas de hoy', 
-            value: new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(res.ventas_hoy || 0), 
-            change: 'Actualizado hoy', 
-            iconPath: 'M4 19V5m0 14h16M8 16v-5m4 5V7m4 9v-3', 
-            bgColor: 'bg-red-50', iconColor: 'text-red-600'
-          },
-          { 
-            title: 'Productos', 
-            value: String(res.total_productos || 0), 
-            change: `${res.stock_bajo || 0} con stock bajo`, 
-            iconPath: 'm3 7 9-4 9 4-9 4-9-4Zm0 0v10l9 4 9-4V7m-9 4v10', 
-            bgColor: 'bg-red-50', iconColor: 'text-red-600'
-          },
-          { 
-            title: 'Clientes', 
-            value: String(res.total_clientes || 0), 
-            change: 'Registrados', 
-            iconPath: 'M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2m7-10a4 4 0 1 0 0-8 4 4 0 0 0 0 8', 
-            bgColor: 'bg-red-50', iconColor: 'text-red-600'
-          },
-          { 
-            title: 'Pedidos', 
-            value: String(res.total_pedidos || 0), 
-            change: `${res.pedidos_pendientes || 0} pendientes`, 
-            iconPath: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01', 
-            bgColor: 'bg-red-50', iconColor: 'text-red-600'
-          }
-        ];
-
-        this.latestSales = res.ultimas_ventas || [];
-
-        const totalProdAll = res.categorias?.reduce((acc: number, c: any) => acc + parseInt(c.total_prod), 0) || 1;
-        this.categories = (res.categorias || []).map((c: any) => ({
-          name: c.name,
-          percentage: Math.round((parseInt(c.total_prod) / totalProdAll) * 100),
-          color: c.color
-        }));
-
-        this.weeklySales = (res.ventas_semana || []).map((v: any) => ({
-          day: v.fecha,
-          amount: parseFloat(v.total_dia)
-        }));
-        this.calculateWeeklyPercentages();
-
-        this.cdr.detectChanges();
+        if (this.canViewFullDashboard) {    
+          this.metrics = [
+            { 
+              title: 'Ventas de hoy', 
+              value: new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(res.ventas_hoy || 0), 
+              change: 'Actualizado hoy', 
+              iconPath: 'M4 19V5m0 14h16M8 16v-5m4 5V7m4 9v-3', 
+              bgColor: 'bg-red-50', iconColor: 'text-red-600'
+            },
+            { 
+              title: 'Productos', 
+              value: String(res.total_productos || 0), 
+              change: `${res.stock_bajo || 0} con stock bajo`, 
+              iconPath: 'm3 7 9-4 9 4-9 4-9-4Zm0 0v10l9 4 9-4V7m-9 4v10', 
+              bgColor: 'bg-red-50', iconColor: 'text-red-600'
+            },
+            { 
+              title: 'Clientes', 
+              value: String(res.total_clientes || 0), 
+              change: 'Registrados', 
+              iconPath: 'M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2m7-10a4 4 0 1 0 0-8 4 4 0 0 0 0 8', 
+              bgColor: 'bg-red-50', iconColor: 'text-red-600'
+            },
+            { 
+              title: 'Pedidos', 
+              value: String(res.total_pedidos || 0), 
+              change: `${res.pedidos_pendientes || 0} pendientes`, 
+              iconPath: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01', 
+              bgColor: 'bg-red-50', iconColor: 'text-red-600'
+            }
+          ];
+          const totalProdAll = res.categorias?.reduce((acc: number, c: any) => acc + parseInt(c.total_prod), 0) || 1;
+          this.categories = (res.categorias || []).map((c: any) => ({
+            name: c.name,
+            percentage: Math.round((parseInt(c.total_prod) / totalProdAll) * 100),
+            color: c.color
+          }));
+          
+          this.weeklySales = (res.ventas_semana || []).map((v: any) => ({
+            day: v.fecha,
+            amount: parseFloat(v.total_dia)
+          }));
+          this.calculateWeeklyPercentages();
+        }
+      this.latestSales = res.ultimas_ventas || [];
+      this.cdr.detectChanges();
       },
       error: (err: any) => console.error('Error al cargar dashboard:', err)
     });
+  }
+  private cargarCatalogoProductos(): void {
+    this.sProducto.consulta().subscribe({
+      next: (res: any) => {
+        this.catalogoProductos = Array.isArray(res) ? res : [];
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Error al cargar catálogo de productos:', err)
+    });
+  }
+  public filtrarProductos(): any[] {
+    if (!this.catalogoProductos) return [];
+    if (!this.buscarProducto.trim()) return this.catalogoProductos;
+    const filtro = this.buscarProducto.toLowerCase();
+    return this.catalogoProductos.filter(p =>
+      p.nombre?.toLowerCase().includes(filtro) ||
+      p.codigo_barras?.toLowerCase().includes(filtro)
+    );
   }
 
   private calculateWeeklyPercentages(): void {

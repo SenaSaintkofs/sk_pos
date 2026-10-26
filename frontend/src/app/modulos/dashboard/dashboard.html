@@ -8,10 +8,52 @@
   <div class="dashboard-container p-6 space-y-6">
     <header class="bg-white border rounded-2xl p-5 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
       <div>
-        <h1 class="text-2xl font-bold text-gray-900">Bienvenido, {{ currentUser.nombre }}</h1>
+        <h1 class="text-2xl font-bold text-gray-900">Bienvenido, {{ currentUser.nombre }}
+          @if (currentUser.rol === 'CLIENTE') { al catalogo de productos - autoservicio}</h1>
         <span class="text-xs text-gray-500">Rol activo: <span class="font-bold text-red-600 uppercase">{{ currentUser.rol }}</span></span>
       </div>
     </header>
+
+@if (currentUser.rol === 'CLIENTE') {
+      <div class="space-y-4">
+        <div class="relative max-w-xl">
+          <span class="absolute left-3 top-3 text-gray-400">⌕</span>
+          <input [(ngModel)]="buscarProducto" type="text"
+                 class="w-full pl-9 pr-4 py-2.5 border rounded-xl bg-white shadow-sm text-sm outline-none" 
+                 placeholder="Buscar productos disponibles...">
+        </div>
+
+        <!-- Grid de Productos (Solo lectura) -->
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          @for (prod of catalogoProductos; track prod.id_producto) {
+          <div class="bg-white border rounded-2xl p-4 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+              <div>
+                  <div class="h-36 bg-gray-50 rounded-xl flex items-center justify-center text-4xl relative overflow-hidden border">
+                      <span class="absolute top-2 left-2 bg-yellow-100 text-yellow-800 text-xs font-bold px-2.5 py-1 rounded-lg border border-yellow-200">
+                          Stock {{ prod.stock }}
+                      </span>
+                      @if (prod.imagen_url) {
+                          <img [src]="prod.imagen_url" [alt]="prod.nombre" class="h-full w-full object-cover">
+                      } @else {
+                          <span class="text-gray-300">▣</span>
+                      }
+                  </div>
+                  <h3 class="font-bold text-gray-900 mt-3 truncate">{{ prod.nombre }}</h3>
+                  <p class="text-xs text-gray-400 mt-0.5">Código: {{ prod.codigo_barras || 'Sin código' }}</p>
+                  <p class="text-xs text-red-600 font-semibold mt-1">Categoría: {{ prod.nombre_categoria || 'General' }}</p>
+              </div>
+              
+              <div class="flex justify-between items-center mt-4 pt-3 border-t border-gray-100">
+                  <span class="text-xs text-gray-500 font-medium">Precio unitario</span>
+                  <b class="text-gray-900 font-black">{{ prod.precio_venta | currency:'COP':'symbol':'1.0-0' }}</b>
+              </div>
+          </div>
+          } @empty {
+          <div class="col-span-full py-12 text-center text-gray-400 font-medium bg-white rounded-2xl border">No hay productos disponibles en este momento.</div>
+          }
+        </div>
+      </div>
+    }
 
     <!-- SECCIÓN DE ADMINISTRADOR: KPIs, GRÁFICAS Y CATEGORÍAS -->
     @if (canViewFullDashboard) {
