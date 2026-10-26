@@ -22,7 +22,7 @@ INSERT INTO PROVEEDOR (nit, nombre, telefono) VALUES
 
 -- 4. INSERTAR PRODUCTOS
 -- El precio_venta es superior al costo_compra para mantener lógica de negocio
-INSERT INTO PRODUCTO (id_categoria, codigo_barras, nombre, stock, unidad_medida, costo_compra, precio_venta, controla_stock) VALUES
+INSERT INTO PRODUCTO (id_categoria, codigo_barras, nombre, stock, unidad_medida, costo_compra, precio_venta, controla_stock, imagen_url) VALUES
 (1, '7701234567890', 'Arroz Blanco 1kg', 100, 'UNIDAD', 2500.00, 3200.00, TRUE, 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500'),
 (1, '7709876543210', 'Aceite de Girasol 1L', 50, 'UNIDAD', 8500.00, 11000.00, TRUE, 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=500'),
 (2, '7702223334445', 'Gaseosa Cola 2L', 80, 'UNIDAD', 3500.00, 4800.00, TRUE, 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500'),
