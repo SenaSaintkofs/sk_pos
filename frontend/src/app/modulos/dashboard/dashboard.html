@@ -18,9 +18,7 @@
       <div class="space-y-4">
         <div class="relative max-w-xl">
           <span class="absolute left-3 top-3 text-gray-400">⌕</span>
-          <input [(ngModel)]="buscarProducto" type="text"
-                 class="w-full pl-9 pr-4 py-2.5 border rounded-xl bg-white shadow-sm text-sm outline-none" 
-                 placeholder="Buscar productos disponibles...">
+          <input [(ngModel)]="buscarProducto" type="text" class="w-full pl-9 pr-4 py-2.5 border rounded-xl bg-white shadow-sm text-sm outline-none" placeholder="Buscar productos disponibles...">
         </div>
 
         <!-- Grid de Productos (Solo lectura) -->
@@ -125,73 +123,78 @@
     }
 
     <!-- SECCIÓN COMPARTIDA: ACCESOS RÁPIDOS HORIZONTALES Y ÚLTIMAS VENTAS -->
-    <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      
-      <!-- Accesos Rápidos Horizontales Con Barra de Progreso y Flecha -->
-      <div class="border p-5 rounded-2xl bg-white soft-shadow col-span-1">
-        <h3 class="font-bold mb-4">Accesos rápidos</h3>
-        <div class="flex flex-col gap-3">
-          @for (tile of quickAccess; track tile.title) {
-            <button (click)="navigateToModule(tile.title)" 
-                    class="menu-tile bg-white rounded-2xl border p-4 flex items-center gap-4 w-full relative text-left group">
-              
-              <div class="w-12 h-12 rounded-xl bg-gray-50 text-red-600 flex items-center justify-center flex-shrink-0">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                  <path [attr.d]="tile.iconPath" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-              </div>
-              
-              <div class="flex-1 min-w-0 pr-2">
-                <h4 class="font-bold text-sm text-gray-800">{{ tile.title }}</h4>
-                <p class="text-xxs text-gray-400 mt-0.5 mb-1.5">{{ tile.desc }}</p>
+    @if (currentUser.rol !== 'CLIENTE') {
+      <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Accesos Rápidos -->
+        <div class="border p-5 rounded-2xl bg-white soft-shadow col-span-1">
+          <h3 class="font-bold mb-4">Accesos rápidos</h3>
+          <div class="flex flex-col gap-3">
+            @for (tile of quickAccess; track tile.title) {
+              <button (click)="navigateToModule(tile.title)" 
+                      class="menu-tile bg-white rounded-2xl border p-4 flex items-center gap-4 w-full relative text-left group">
                 
-                <div class="h-1 bg-gray-100 rounded-full w-24 overflow-hidden">
-                  <div class="h-1 bg-red-500 rounded-full transition-all duration-500" [style.width.%]="tile.progress"></div>
+                <div class="w-12 h-12 rounded-xl bg-gray-50 text-red-600 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <path [attr.d]="tile.iconPath" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
                 </div>
-              </div>
+                
+                <div class="flex-1 min-w-0 pr-2">
+                  <h4 class="font-bold text-sm text-gray-800">{{ tile.title }}</h4>
+                  <p class="text-xxs text-gray-400 mt-0.5 mb-1.5">{{ tile.desc }}</p>
+                  
+                  <div class="h-1 bg-gray-100 rounded-full w-24 overflow-hidden">
+                    <div class="h-1 bg-red-500 rounded-full transition-all duration-500" [style.width.%]="tile.progress"></div>
+                  </div>
+                </div>
 
-              <span class="ml-auto text-lg text-gray-300 group-hover:text-red-500 transition-colors duration-200">
-                →
-              </span>
-            </button>
-          }
+                <span class="ml-auto text-lg text-gray-300 group-hover:text-red-500 transition-colors duration-200">
+                  →
+                </span>
+              </button>
+            }
+          </div>
         </div>
-      </div>
 
-      <!-- Tabla de Últimas Ventas -->
-      <div class="border p-5 rounded-2xl bg-white soft-shadow lg:col-span-2">
-        <h3 class="font-bold mb-4">Últimas ventas</h3>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm">
-            <thead>
-              <tr class="border-b text-gray-400 text-xs">
-                <th class="pb-2">ID</th>
-                <th class="pb-2">Cliente</th>
-                <th class="pb-2">Fecha</th>
-                <th class="pb-2 text-right">Total</th>
-                <th class="pb-2 text-center">Estado</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (sale of latestSales; track sale.id) {
-                <tr class="border-b last:border-0 hover:bg-gray-50/50 transition-colors">
-                  <td class="py-3 font-semibold text-red-600">{{ sale.id }}</td>
-                  <td class="py-3 font-medium">{{ sale.customer }}</td>
-                  <td class="py-3 text-gray-500 text-xs">{{ sale.date }}</td>
-                  <td class="py-3 text-right font-black text-gray-800">{{ sale.total | currency:'COP':'symbol':'1.0-0' }}</td>
-                  <td class="py-3 text-center">
-                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">
-                      {{ sale.status }}
-                    </span>
-                  </td>
+        <!-- Tabla de Últimas Ventas -->
+        <div class="border p-5 rounded-2xl bg-white soft-shadow lg:col-span-2">
+          <h3 class="font-bold mb-4">Últimas ventas</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead>
+                <tr class="border-b text-gray-400 text-xs">
+                  <th class="pb-2">ID</th>
+                  <th class="pb-2">Cliente</th>
+                  <th class="pb-2">Fecha</th>
+                  <th class="pb-2 text-right">Total</th>
+                  <th class="pb-2 text-center">Estado</th>
                 </tr>
-              }
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                @for (sale of latestSales; track sale.id) {
+                  <tr class="border-b last:border-0 hover:bg-gray-50/50 transition-colors">
+                    <td class="py-3 font-semibold text-red-600">{{ sale.id }}</td>
+                    <td class="py-3 font-medium">{{ sale.customer }}</td>
+                    <td class="py-3 text-gray-500 text-xs">{{ sale.date }}</td>
+                    <td class="py-3 text-right font-black text-gray-800">{{ sale.total | currency:'COP':'symbol':'1.0-0' }}</td>
+                    <td class="py-3 text-center">
+                      <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">
+                        {{ sale.status }}
+                      </span>
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="5" class="py-6 text-center text-gray-400 font-medium">No hay ventas registradas recientemente.</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
 
-    </section>
-
+      </section>
+    }
   </div>
 }

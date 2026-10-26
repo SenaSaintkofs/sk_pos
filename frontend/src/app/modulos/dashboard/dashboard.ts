@@ -90,7 +90,7 @@ export class DashboardComponent implements OnInit {
     this.canViewFullDashboard = (rol === 'ADMINISTRADOR');
     this.canViewDashboardAtAll = (rol === 'ADMINISTRADOR' || rol === 'EMPLEADO' || rol === 'CLIENTE');
 
-    if (this.canViewFullDashboard) {
+    if (this.canViewDashboardAtAll) {
       if (rol === 'CLIENTE') {
         this.cargarCatalogoProductos();
       } else {
@@ -148,8 +148,8 @@ export class DashboardComponent implements OnInit {
           }));
           this.calculateWeeklyPercentages();
         }
-      this.latestSales = res.ultimas_ventas || [];
-      this.cdr.detectChanges();
+        this.latestSales = res.ultimas_ventas || [];
+        this.cdr.detectChanges();
       },
       error: (err: any) => console.error('Error al cargar dashboard:', err)
     });
