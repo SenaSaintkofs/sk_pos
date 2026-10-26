@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-estado-404',
-  imports: [RouterLink],
+  imports: [],
   templateUrl: './estado-404.html',
   styleUrl: './estado-404.css',
 })
