@@ -46,8 +46,6 @@ INSERT INTO DETALLE_PEDIDO (id_pedido, id_producto, cantidad, costo_unitario) VA
 -- Venta 1: Efectivo. 2 Arroz (6400) + 1 Aceite (11000) = 17400. Recibe 20000, cambio 2600.
 INSERT INTO VENTA (id_usuario_cliente, fecha, subtotal, descuento_total, valor_envio, total, tipo_pago, comentario_envio, monto_recibido, cambio) VALUES
 (3, '2026-10-22 10:15:00', 17400.00, 0.00, 0.00, 17400.00, 'EFECTIVO', NULL, 20000.00, 2600.00),
--- Venta 2: Crédito. 1 Detergente (8200) + 2 Leches (7200) = 15400. Descuento de 400. Total = 15000.
-(4, '2026-10-22 16:45:00', 15400.00, 400.00, 0.00, 15000.00, 'CREDITO', NULL, NULL, NULL),
 -- Venta 3: Con Envío y pago QR. 3 Gaseosas = 14400 + 5000 envío = 19400.
 (3, '2026-10-23 11:00:00', 14400.00, 0.00, 5000.00, 19400.00, 'QR', 'Entregar en portería torre B', NULL, NULL);
 
@@ -56,18 +54,6 @@ INSERT INTO DETALLE_VENTA (id_venta, id_producto, cantidad, precio_unitario, des
 -- Detalles Venta 1
 (1, 1, 2, 3200.00, 0.00),
 (1, 2, 1, 11000.00, 0.00),
--- Detalles Venta 2
-(2, 5, 1, 8200.00, 0.00),
 (2, 4, 2, 3600.00, 400.00), -- Se aplicó el descuento aquí
 -- Detalles Venta 3
 (3, 3, 3, 4800.00, 0.00);
-
--- 9. INSERTAR CONTROL DE CRÉDITOS
--- El crédito se genera de la Venta 2 (Total: 15000)
-INSERT INTO CREDITO_HISTORIAL (id_venta, deuda_inicial, deuda_actual, estado) VALUES
-(2, 15000.00, 5000.00, 'PENDIENTE'); -- Ya abonó 10000, debe 5000
-
--- 10. INSERTAR HISTORIAL DE ABONOS A CRÉDITOS
--- Abono para el crédito anterior
-INSERT INTO HISTORIAL_PAGOS_CREDITO (id_credito, fecha_pago, valor_pagado) VALUES
-(1, '2026-10-23 08:30:00', 10000.00);

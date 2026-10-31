@@ -67,7 +67,7 @@ CREATE TABLE VENTA (
     descuento_total DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     valor_envio DECIMAL(10,2) NULL DEFAULT 0.00,
     total DECIMAL(10,2) NOT NULL,
-    tipo_pago VARCHAR(50) NOT NULL, -- EFECTIVO, CREDITO, QR
+    tipo_pago VARCHAR(50) NOT NULL, -- EFECTIVO, QR
     comentario_envio TEXT NULL,
     monto_recibido DECIMAL(10,2) NULL, -- efectivo
     cambio DECIMAL(10,2) NULL,        -- efectivo
@@ -98,21 +98,3 @@ CREATE TABLE DETALLE_PEDIDO (
     FOREIGN KEY (id_producto) REFERENCES PRODUCTO(id_producto)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Tabla de Control de Créditos
-CREATE TABLE CREDITO_HISTORIAL (
-    id_credito INT AUTO_INCREMENT PRIMARY KEY,
-    id_venta INT NOT NULL,
-    deuda_inicial DECIMAL(10,2) NOT NULL,
-    deuda_actual DECIMAL(10,2) NOT NULL,
-    estado VARCHAR(50) NOT NULL DEFAULT 'PENDIENTE', -- Ej: 'PENDIENTE', 'PAGADO'
-    FOREIGN KEY (id_venta) REFERENCES VENTA(id_venta)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- Tabla de Abonos a créditos
-CREATE TABLE HISTORIAL_PAGOS_CREDITO (
-    id_pago INT AUTO_INCREMENT PRIMARY KEY,
-    id_credito INT NOT NULL,
-    fecha_pago DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    valor_pagado DECIMAL(10,2) NOT NULL,
-    FOREIGN KEY (id_credito) REFERENCES CREDITO_HISTORIAL(id_credito) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
