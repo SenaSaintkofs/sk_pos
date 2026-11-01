@@ -15,7 +15,7 @@ class Pedido
                 FROM PEDIDO p
                 INNER JOIN PROVEEDOR pr ON p.id_proveedor = pr.id_proveedor
                 LEFT JOIN DETALLE_PEDIDO dp ON p.id_pedido = dp.id_pedido
-                ORDER BY p.id_pedido DESC";
+                WHERE p.activo = TRUE ORDER BY p.id_pedido DESC";
 
         $res = mysqli_query($this->conexion, $sql);
         $vec = [];
@@ -60,9 +60,21 @@ class Pedido
 
     public function eliminar($id)
     {
-        mysqli_query($this->conexion, "DELETE FROM DETALLE_PEDIDO WHERE id_pedido = $id");
-        mysqli_query($this->conexion, "DELETE FROM PEDIDO WHERE id_pedido = $id");
+        $vec = [];
+        $sql = "DELETE FROM PEDIDO WHERE id_pedido = $id";
 
-        return ['resultado' => 'ok', 'mensaje' => 'Pedido eliminado'];
+        if (mysqli_query($this->conexion, $sql)) {
+            $vec['resultado'] = "ok";
+            $vec['mensaje'] =  "Pedido eliminado";
+        } else {
+            $sql = "UPDATE PEDIDO SET activo = FALSE WHERE id_pedido = $id";
+            mysqli_query($this->conexion, $sql);
+
+            $vec['resultado'] = "ok";
+            $vec['mensaje'] =  "Se cambio el pedido a inactivo";
+        }
+        // cascada: mysqli_query($this->conexion, "DELETE FROM DETALLE_PEDIDO WHERE id_pedido = $id");
+
+        return $vec;
     }
 }

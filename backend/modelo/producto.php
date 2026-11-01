@@ -10,7 +10,7 @@
         public function consulta() {
             $sql = "SELECT P.*, C.nombre AS nombre_categoria FROM PRODUCTO P
                     INNER JOIN CATEGORIA C ON P.id_categoria = C.id_categoria
-                    ORDER BY P.nombre";
+                    WHERE p.activo = TRUE ORDER BY P.nombre";
 
             $res = mysqli_query($this->conexion, $sql) or die("Error en consulta de producto");
             $vec = [];
@@ -22,12 +22,22 @@
         }
 
         public function eliminar($id) {
-            $sql = "DELETE FROM PRODUCTO WHERE id_producto = $id";
-            mysqli_query($this->conexion, $sql) or die("No se elimino el registro");
-
             $vec = [];
-            $vec['resultado'] = "ok";
-            $vec['mensaje'] = "Se elimino el registro";
+            $sql = "DELETE FROM PRODUCTO WHERE id_producto = $id";
+            if (mysqli_query($this->conexion, $sql)) {
+                $vec['resultado'] = "ok";
+                $vec['mensaje'] = "Se elimino el registro";
+            } else {
+                $sql = "UPDATE PRODUCTO SET activo = FALSE WHERE id_producto = $id";
+
+                if (mysqli_query($this->conexion, $sql)) {
+                    $vec['resultado'] = "ok";
+                    $vec['mensaje'] = "Tiene registros asociados. Se cambio el registro a inactivo";
+                } else {
+                    $vec['resultado'] = "error";
+                    $vec['mensaje'] = "No se elimino el registro";
+                }
+            }
             return $vec;
         }
 

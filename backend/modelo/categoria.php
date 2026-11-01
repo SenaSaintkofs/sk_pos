@@ -10,7 +10,7 @@
         }
 
         public function consultar() {
-            $sql = "SELECT * FROM CATEGORIA ORDER BY nombre";
+            $sql = "SELECT * FROM CATEGORIA WHERE activo = TRUE ORDER BY nombre";
             $res = mysqli_query($this->conexion, $sql) or die("No se ha encontrado categoria");
 
             $vec = [];
@@ -23,12 +23,23 @@
         }
 
         public function eliminar($id) {
-            $sql = "DELETE FROM CATEGORIA WHERE id_categoria = $id";
-            mysqli_query($this->conexion, $sql) or die("No se elimino el registro");
-
             $vec = [];
-            $vec['resultado'] = "OK";
-            $vec['mensaje'] = "Se elimino el registro";
+            $sql = "DELETE FROM CATEGORIA WHERE id_categoria = $id";
+            
+            if (mysqli_query($this->conexion, $sql)) {
+                $vec['resultado'] = "OK";
+                $vec['mensaje'] = "Se elimino el registro";
+            } else {
+                $sql = "UPDATE CATEGORIA SET activo = FALSE WHERE id_categoria = $id";
+
+                if (mysqli_query($this->conexion, $sql)) {
+                    $vec['resultado'] = "OK";
+                    $vec['mensaje'] = "Tiene registros asociados. Se cambio el registro a inactivo";
+                } else {
+                    $vec['resultado'] = "ERROR";
+                    $vec['mensaje'] = "No se elimino el registro";
+                }
+            }
 
             return $vec;
         }

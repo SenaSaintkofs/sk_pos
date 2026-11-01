@@ -10,7 +10,7 @@
         }
 
         public function consulta() {
-            $sql = "SELECT * FROM PROVEEDOR ORDER BY nombre";
+            $sql = "SELECT * FROM PROVEEDOR ORDER WHERE activo = TRUE BY nombre";
             $res = mysqli_query($this->conexion, $sql) or die("No se ha encontrado categoria");
 
             $vec = [];
@@ -23,12 +23,23 @@
         }
 
         public function eliminar($id) {
-            $sql = "DELETE FROM PROVEEDOR WHERE id_proveedor = $id";
-            mysqli_query($this->conexion, $sql) or die("No se elimino el registro");
-
             $vec = [];
-            $vec['resultado'] = "ok";
-            $vec['mensaje'] = "Se elimino el registro";
+            $sql = "DELETE FROM PROVEEDOR WHERE id_proveedor = $id";
+
+            if (mysqli_query($this->conexion, $sql)) {
+                $vec['resultado'] = "ok";
+                $vec['mensaje'] = "Se elimino el registro";
+            } else {
+                $sql = "UPDATE PROVEEDOR SET activo = FALSE WHERE id_proveedor = $id";
+
+                if (mysqli_query($this->conexion, $sql)) {
+                    $vec['resultado'] = "ok";
+                    $vec['mensaje'] = "Tiene registros asociados. Se cambio el registro a inactivo";
+                } else {
+                    $vec['resultado'] = "error";
+                    $vec['mensaje'] = "No se elimino el registro";
+                }
+            }
 
             return $vec;
         }
