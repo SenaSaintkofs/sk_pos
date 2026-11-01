@@ -10,7 +10,7 @@ CREATE TABLE USUARIO (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
     correo VARCHAR(100) NOT NULL UNIQUE,
     clave VARCHAR(255) NOT NULL,
-    rol VARCHAR(50) NOT NULL,
+    rol VARCHAR(50) NOT NULL, 
     primer_nombre VARCHAR(50) NOT NULL,
     segundo_nombre VARCHAR(50) NULL,
     primer_apellido VARCHAR(50) NOT NULL,
@@ -43,12 +43,12 @@ CREATE TABLE PRODUCTO (
     codigo_barras VARCHAR(100) NULL UNIQUE,
     nombre VARCHAR(150) NOT NULL,
     stock INT NOT NULL DEFAULT 0,
-    unidad_medida VARCHAR(20) NOT NULL,
+    unidad_medida VARCHAR(20) NOT NULL, 
     costo_compra DECIMAL(10,2) NOT NULL,
     precio_venta DECIMAL(10,2) NOT NULL,
     controla_stock BOOLEAN NOT NULL DEFAULT TRUE,
     imagen_url VARCHAR(255) NULL,
-    activo BOOLEAN NOT NULL DEFAULT TRUE,
+    activo BOOLEAN NOT NULL DEFAULT TRUE, 
     FOREIGN KEY (id_categoria) REFERENCES CATEGORIA(id_categoria) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -67,6 +67,7 @@ CREATE TABLE PEDIDO (
 CREATE TABLE VENTA (
     id_venta INT AUTO_INCREMENT PRIMARY KEY,
     id_usuario_cliente INT NULL,
+    id_usuario_empleado INT NOT NULL, 
     fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     subtotal DECIMAL(10,2) NOT NULL,
     descuento_total DECIMAL(10,2) NOT NULL DEFAULT 0.00,
@@ -74,12 +75,11 @@ CREATE TABLE VENTA (
     total DECIMAL(10,2) NOT NULL,
     tipo_pago VARCHAR(50) NOT NULL, -- EFECTIVO, QR
     comentario_envio TEXT NULL,
-    monto_recibido DECIMAL(10,2) NULL, -- efectivo
-    cambio DECIMAL(10,2) NULL,        -- efectivo
-    activo BOOLEAN NOT NULL DEFAULT TRUE,
-    FOREIGN KEY (id_usuario_cliente) REFERENCES USUARIO(id_usuario)
+    monto_recibido DECIMAL(10,2) NULL, 
+    cambio DECIMAL(10,2) NULL,        
+    FOREIGN KEY (id_usuario_cliente) REFERENCES USUARIO(id_usuario),
+    FOREIGN KEY (id_usuario_empleado) REFERENCES USUARIO(id_usuario)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 
 -- Tabla Detalles de Venta (carrito)
 CREATE TABLE DETALLE_VENTA (
@@ -103,4 +103,3 @@ CREATE TABLE DETALLE_PEDIDO (
     FOREIGN KEY (id_pedido) REFERENCES PEDIDO(id_pedido) ON DELETE CASCADE,
     FOREIGN KEY (id_producto) REFERENCES PRODUCTO(id_producto)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
