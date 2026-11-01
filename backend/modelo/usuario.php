@@ -1,5 +1,6 @@
 <?php
-class Usuario {
+class Usuario
+{
     private $conexion;
 
     public function __construct($conexion)
@@ -7,53 +8,73 @@ class Usuario {
         $this->conexion = $conexion;
     }
 
-    public function consulta() {
-        $sql = "SELECT id_usuario, correo, clave, rol, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, CONCAT_WS(' ', primer_nombre, segundo_nombre, primer_apellido, segundo_apellido) AS usuario, numero_documento, telefono FROM USUARIO ORDER BY primer_nombre";
+    public function consulta()
+    {
+        $sql = "SELECT id_usuario, correo, clave, rol, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, CONCAT_WS(' ', primer_nombre, segundo_nombre, primer_apellido, segundo_apellido) AS usuario, numero_documento, telefono FROM USUARIO WHERE activo = TRUE ORDER BY primer_nombre";
 
         $res = mysqli_query($this->conexion, $sql) or die("No se ha encontrado usuario");
 
         $vec = [];
-        while($row = mysqli_fetch_array($res)){
+        while ($row = mysqli_fetch_array($res)) {
             $vec[] = $row;
         }
 
         return $vec;
     }
 
-    public function eliminar($id) {
+    public function eliminar($id)
+    {
+        $vec = [];
         $sql = "DELETE FROM USUARIO WHERE id_usuario = ?";
         $stmt = mysqli_prepare($this->conexion, $sql);
-        mysqli_stmt_bind_param($stmt, "i", $id);
-        mysqli_stmt_execute($stmt);
 
-        $vec = [];
-        $vec['resultado'] = "ok";
-        $vec['mensaje'] = "Se elimino el registro";
+        if ($stmt) {
+            mysqli_stmt_bind_param($stmt, "i", $id);
 
-        mysqli_stmt_close($stmt);
+            if (mysqli_stmt_execute($stmt)) {
+                $vec['resultado'] = "ok";
+                $vec['mensaje'] = "Se elimino el registro";
+            } else {
+                mysqli_stmt_close($stmt);
+
+                $sql = "UPDATE USUARIO SET activo = FALSE WHERE id_usuario = ?";
+                $stmt = mysqli_prepare($this->conexion, $sql);
+                mysqli_stmt_bind_param($stmt, "i", $id);
+                mysqli_stmt_execute($stmt);
+                mysqli_stmt_close($stmt);
+                $vec['resultado'] = "ok";
+                $vec['mensaje'] = "Tiene registros asociados. Se cambio el registro a inactivo.";
+            }
+        } else {
+            $vec['resultado'] = "error";
+            $vec['mensaje'] = "No se elimino el registro";
+        }
         return $vec;
     }
 
-    public function insertar($params) {
+    public function insertar($params)
+    {
         $claveEncriptada = password_hash($params->clave, PASSWORD_BCRYPT);
 
         $sql = "INSERT INTO USUARIO(correo, clave, rol, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, numero_documento, telefono) 
                 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        
+
         $stmt = mysqli_prepare($this->conexion, $sql);
         if (!$stmt) {
             die("Error al preparar inserción: " . mysqli_error($this->conexion));
         }
 
-        mysqli_stmt_bind_param($stmt, "sssssssss", 
-            $params->correo, 
-            $claveEncriptada, 
-            $params->rol, 
-            $params->primer_nombre, 
-            $params->segundo_nombre, 
-            $params->primer_apellido, 
-            $params->segundo_apellido, 
-            $params->numero_documento, 
+        mysqli_stmt_bind_param(
+            $stmt,
+            "sssssssss",
+            $params->correo,
+            $claveEncriptada,
+            $params->rol,
+            $params->primer_nombre,
+            $params->segundo_nombre,
+            $params->primer_apellido,
+            $params->segundo_apellido,
+            $params->numero_documento,
             $params->telefono
         );
 
@@ -67,7 +88,8 @@ class Usuario {
         return $vec;
     }
 
-    public function editar($id, $params) {
+    public function editar($id, $params)
+    {
         $esNuevaClave = (strlen($params->clave) !== 60);
 
         if ($esNuevaClave && !empty(trim($params->clave))) {
@@ -77,21 +99,23 @@ class Usuario {
         }
 
         $sql = "UPDATE USUARIO SET correo = ?, clave = ?, rol = ?, primer_nombre = ?, segundo_nombre = ?, primer_apellido = ?, segundo_apellido = ?, numero_documento = ?, telefono = ? WHERE id_usuario = ?";
-        
+
         $stmt = mysqli_prepare($this->conexion, $sql);
-        if (!$stmt) { 
-            die("Error al preparar actualización: " . mysqli_error($this->conexion)); 
+        if (!$stmt) {
+            die("Error al preparar actualización: " . mysqli_error($this->conexion));
         }
 
-        mysqli_stmt_bind_param($stmt, "sssssssssi", 
-            $params->correo, 
-            $claveFinal, 
-            $params->rol, 
-            $params->primer_nombre, 
-            $params->segundo_nombre, 
-            $params->primer_apellido, 
-            $params->segundo_apellido, 
-            $params->numero_documento, 
+        mysqli_stmt_bind_param(
+            $stmt,
+            "sssssssssi",
+            $params->correo,
+            $claveFinal,
+            $params->rol,
+            $params->primer_nombre,
+            $params->segundo_nombre,
+            $params->primer_apellido,
+            $params->segundo_apellido,
+            $params->numero_documento,
             $params->telefono,
             $id
         );
@@ -106,4 +130,3 @@ class Usuario {
         return $vec;
     }
 }
-?>

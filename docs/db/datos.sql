@@ -16,13 +16,15 @@ CREATE TABLE USUARIO (
     primer_apellido VARCHAR(50) NOT NULL,
     segundo_apellido VARCHAR(50) NULL,
     numero_documento VARCHAR(20) NOT NULL UNIQUE,
-    telefono VARCHAR(20) NOT NULL
+    telefono VARCHAR(20) NOT NULL,
+    activo BOOLEAN NOT NULL DEFAULT TRUE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tabla de Categorías
 CREATE TABLE CATEGORIA (
     id_categoria INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL
+    nombre VARCHAR(100) NOT NULL,
+    activo BOOLEAN NOT NULL DEFAULT TRUE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tabla de Proveedores
@@ -30,7 +32,8 @@ CREATE TABLE PROVEEDOR (
     id_proveedor INT AUTO_INCREMENT PRIMARY KEY,
     nit VARCHAR(50) NOT NULL UNIQUE,
     nombre VARCHAR(150) NOT NULL,
-    telefono VARCHAR(20) NULL
+    telefono VARCHAR(20) NULL,
+    activo BOOLEAN NOT NULL DEFAULT TRUE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tabla de Productos (Conectada a CATEGORIA)
@@ -45,6 +48,7 @@ CREATE TABLE PRODUCTO (
     precio_venta DECIMAL(10,2) NOT NULL,
     controla_stock BOOLEAN NOT NULL DEFAULT TRUE,
     imagen_url VARCHAR(255) NULL,
+    activo BOOLEAN NOT NULL DEFAULT TRUE,
     FOREIGN KEY (id_categoria) REFERENCES CATEGORIA(id_categoria) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -55,6 +59,7 @@ CREATE TABLE PEDIDO (
     fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     valor_total DECIMAL(10,2) NOT NULL,
     estado_pago VARCHAR(50) NOT NULL, -- PAGADO, PENDIENTE
+    activo BOOLEAN NOT NULL DEFAULT TRUE,
     FOREIGN KEY (id_proveedor) REFERENCES PROVEEDOR(id_proveedor)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -71,6 +76,7 @@ CREATE TABLE VENTA (
     comentario_envio TEXT NULL,
     monto_recibido DECIMAL(10,2) NULL, -- efectivo
     cambio DECIMAL(10,2) NULL,        -- efectivo
+    activo BOOLEAN NOT NULL DEFAULT TRUE,
     FOREIGN KEY (id_usuario_cliente) REFERENCES USUARIO(id_usuario)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
