@@ -10,7 +10,7 @@
         public function consulta() {
             $sql = "SELECT V.*, CONCAT_WS(' ', U.primer_nombre, U.primer_apellido) AS usuario FROM VENTA V
                     LEFT JOIN USUARIO U ON V.id_usuario_cliente = U.id_usuario
-                    ORDER BY V.fecha DESC";
+                    WHERE V.activo = TRUE ORDER BY V.fecha DESC";
 
             $res = mysqli_query($this->conexion, $sql) or die("Error al consultar las ventas");
 
@@ -24,10 +24,12 @@
 
         public function insertar($params) {
             $id_cliente = (!empty($params->id_usuario_cliente)) ? intval($params->id_usuario_cliente) : "NULL";
-            
+            $id_empleado = isset($params->id_usuario_empleado) ? intval($params->id_usuario_empleado) : 1;
+
             mysqli_begin_transaction($this->conexion); // Iniciar transacción 
-            $sql = "INSERT INTO VENTA (id_usuario_cliente, subtotal, descuento_total, valor_envio, total, tipo_pago, comentario_envio, monto_recibido, cambio) 
-                    VALUES ($id_cliente, $params->subtotal, $params->descuento_total, $params->valor_envio, $params->total, '$params->tipo_pago', '$params->comentario_envio', $params->monto_recibido, $params->cambio)";
+
+            $sql = "INSERT INTO VENTA (id_usuario_cliente, id_usuario_empleado, subtotal, descuento_total, valor_envio, total, tipo_pago, comentario_envio, monto_recibido, cambio) 
+                    VALUES ($id_cliente, $id_empleado, $params->subtotal, $params->descuento_total, $params->valor_envio, $params->total, '$params->tipo_pago', '$params->comentario_envio', $params->monto_recibido, $params->cambio)";
             
             if (mysqli_query($this->conexion, $sql)) {
                 $id_venta = mysqli_insert_id($this->conexion);

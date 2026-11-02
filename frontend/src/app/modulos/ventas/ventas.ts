@@ -203,6 +203,7 @@ export class Ventas implements OnInit {
 
     const datosVenta = {
       id_usuario_cliente: this.customer.id_usuario,
+      id_usuario_empleado: Number(sessionStorage.getItem('id')) || 1,
       subtotal: this.subtotal,
       descuento_total: this.discountAmount,
       valor_envio: this.deliveryCost,
