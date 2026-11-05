@@ -1,3 +1,9 @@
+/**
+ * header.ts representa la parte superior o cabecera de la app web.
+ * Contiene el nombre de la página actual y un botón para cerrar sesión.
+ * al cerrar sesion se borra la información en cache y se redirige a login.
+ */
+
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 @Component({

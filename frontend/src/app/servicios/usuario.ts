@@ -1,3 +1,6 @@
+/**
+ * Este archivo define un servicio para manejar las operaciones del CRUD de usuarios.
+ */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { API_CONFIG } from '../config/api';

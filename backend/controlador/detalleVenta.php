@@ -6,36 +6,38 @@
     require_once('../modelo/conexion.php');
     require_once('../modelo/detalleVenta.php');
 
-    $vec = [];
+    $vec = []; // definir vector de respuesta
 
-    global $conexion;
+    global $conexion; // Variable Global a la DB
 
-    $control = $_GET['control'];
-    $detalleVenta = new DetalleVenta($conexion);
+    $control = $_GET['control']; // tomar dato de control por URL
+    $detalleVenta = new DetalleVenta($conexion); // instanciar clase y pasarle la conexion a la DB
 
-    switch($control) {
-        case 'consulta':
+    // switch para controlar la acción a realizar según el valor de control
+    switch($control) { 
+        case 'consulta': // si el control es 'consulta', llamar al metodo consulta de la clase DetalleVenta
             $vec = $detalleVenta->consulta();
         break;
-        case 'insertar':
+        case 'insertar': // si el control es 'insertar', obtener los datos enviados en formato JSON, decodificarlos y llamar al metodo insertar de la clase DetalleVenta
             $json = file_get_contents('php://input');
             $params = json_decode($json);
             $vec = $detalleVenta->insertar($params);
         break;
-        case 'editar':
+        case 'editar': // si el control es 'editar', obtener los datos enviados en formato JSON, decodificarlos y llamar al metodo editar de la clase DetalleVenta
             $json = file_get_contents('php://input');
             $id = $_GET['id'];
             $params = json_decode($json);
             $vec = $detalleVenta->editar($id, $params);
         break;
-        case 'eliminar':
+        case 'eliminar': // si el control es 'eliminar', obtener el id del registro a eliminar desde la URL y llamar al metodo eliminar de la clase DetalleVenta
             $id = $_GET['id'];
             $vec = $detalleVenta->eliminar($id);
         break;
     }
 
+    // convertir vector a JSON y mostrarlo
     $datos = json_encode($vec);
-    header('Content-Type: application/json');
+    header('Content-Type: application/json'); // indicar que es json
     echo $datos;
 
 // http://localhost:8080/controlador/detalleVenta.php?control=consulta

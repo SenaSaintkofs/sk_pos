@@ -1,4 +1,9 @@
 <?php
+/*** 
+ * En este archivo se define la clase Pedido, que se encarga de gestionar los pedidos.
+ * La clase tiene un constructor que recibe la conexión a la base de datos y métodos para 
+ * consultar, insertar, editar y eliminar pedidos.
+ */
 class Pedido
 {
     private $conexion;
@@ -48,6 +53,13 @@ class Pedido
         return ['resultado' => 'error', 'mensaje' => mysqli_error($this->conexion)];
     }
 
+    /**
+     * Edita un pedido existente y actualiza el stock del producto correspondiente.
+     * si el pedido ya tiene un detalle, se resta la cantidad anterior del stock y se suma la nueva cantidad.
+     * @param int $id El ID del pedido a editar.
+     * @param object $params Un objeto que contiene los nuevos valores para el pedido y el detalle del pedido.
+     * @return array Un arreglo con el resultado de la operación y un mensaje.
+     */
     public function editar($id, $params)
     {
         $sqlOld = "SELECT id_producto, cantidad FROM DETALLE_PEDIDO WHERE id_pedido = $id";

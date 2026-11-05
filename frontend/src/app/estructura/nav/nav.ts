@@ -1,3 +1,4 @@
+// el archivo nav.ts permite mostrar el menu de navegacion dependiendo del rol del usuario logueado
 import { Component, OnInit } from '@angular/core';
 import { RouterLink, Router, RouterLinkActive } from '@angular/router';
 

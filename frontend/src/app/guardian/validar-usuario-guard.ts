@@ -1,3 +1,10 @@
+/**
+ * Este archivo define un guardia de ruta en Angular que valida el acceso de los usuarios a diferentes rutas de la aplicación.
+ * El guardia verifica si el usuario está autenticado y si tiene el rol adecuado para acceder a la ruta solicitada.
+ * Si el usuario no está autenticado, se redirige a la página de inicio de sesión.
+ * Si el usuario tiene un rol que no le permite acceder a la ruta, se redirige a la página de dashboard.
+ */
+
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 

@@ -1,3 +1,11 @@
+/**
+ * el servicio de login.ts se encarga de realizar la consulta al servidor para validar el usuario y contraseña.
+ * si el usuario es valido se almacena en sessionStorage la información del usuario y se redirige al dashboard.
+ * si el usuario no es valido se muestra un mensaje de error.
+ * 
+ * Para ejemplo se expone un usuario demo con correo
+ */
+
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { Login as LoginService} from '../../servicios/login';

@@ -1,9 +1,12 @@
+// importa modulos y servicios asociados a dahsboad
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Dashboard } from '../../servicios/dashboard';
 import { Producto } from '../../servicios/producto';
 import { FormsModule } from '@angular/forms';
+
+// Define interfaces para tipar los datos del dashboard
 interface MetricCard {
   title: string;
   value: string;
@@ -41,6 +44,7 @@ interface QuickTile {
   progress: number; 
 }
 
+// Define el componente.
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -55,9 +59,11 @@ export class DashboardComponent implements OnInit {
     rol: '' 
   };
 
+  // Variables de control de acceso
   public canViewFullDashboard = false;
   public canViewDashboardAtAll = false;
-
+ 
+  // Datos del dashboard
   public metrics: MetricCard[] = [];
   public weeklySales: WeeklyBar[] = [];
   public categories: Category[] = [];
@@ -65,7 +71,7 @@ export class DashboardComponent implements OnInit {
 
   public catalogoProductos: any[] = [];
   public buscarProducto: string = '';
-
+  //Acceso Rapido a modulos
   public quickAccess: QuickTile[] = [
     { title: 'Ventas', desc: 'Registrar ventas', iconPath: 'M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z', progress: 85 }, 
     { title: 'Productos', desc: 'Catálogo e Inventario', iconPath: 'm3 7 9-4 9 4-9 4-9-4Zm0 0v10l9 4 9-4V7m-9 4v10', progress: 40 }, 
@@ -75,6 +81,7 @@ export class DashboardComponent implements OnInit {
     { title: 'Usuarios', desc: 'Roles y accesos', iconPath: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z', progress: 95 }
   ];
 
+  // Inyeta dependencias
   constructor(
     private router: Router,
     private sDashboard: Dashboard,
@@ -82,6 +89,7 @@ export class DashboardComponent implements OnInit {
     private cdr: ChangeDetectorRef
   ) {}
 
+  // carga datos segun el rol logueado.
   ngOnInit() {
     this.currentUser.nombre = sessionStorage.getItem('nombre') || 'Usuario';
     this.currentUser.rol = sessionStorage.getItem('rol') || 'EMPLEADO';
@@ -98,7 +106,7 @@ export class DashboardComponent implements OnInit {
       }
     }
   }
-
+  // Carga datos desde la db en servidor
   private cargarDatosReales(): void {
     this.sDashboard.obtenerResumen().subscribe({
       next: (res: any) => {
@@ -163,6 +171,8 @@ export class DashboardComponent implements OnInit {
       error: (err) => console.error('Error al cargar catálogo de productos:', err)
     });
   }
+
+  // Filtro para catalogo del cliente
   public filtrarProductos(): any[] {
     if (!this.catalogoProductos) return [];
     if (!this.buscarProducto.trim()) return this.catalogoProductos;
@@ -181,6 +191,7 @@ export class DashboardComponent implements OnInit {
     }));
   }
 
+  // Navegación rápida a módulos
   public navigateToModule(moduleTitle: string): void {
     const rutasMap: { [key: string]: string } = {
       'Ventas': '/ventas',

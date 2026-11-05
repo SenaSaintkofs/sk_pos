@@ -7,12 +7,14 @@ require_once('config/cors.php');
 require_once('../modelo/conexion.php');
 require_once('../modelo/dashboard.php');
 
-global $conexion;
-$dashboard = new Dashboard($conexion);
+global $conexion; // Variable Global a la DB
+$dashboard = new Dashboard($conexion); // instanciar clase y pasarle la conexion a la DB
 
-$control = $_GET['control'] ?? '';
+$control = $_GET['control'] ?? ''; // tomar dato de control por URL o asignar vacio
 
-$vec = [];
+$vec = []; // definir vector de respuesta
+
+// si el control es 'resumen', obtener los datos del dashboard
 if ($control === 'resumen') {
     $vec = $dashboard->obtenerDatos();
 }

@@ -1,4 +1,9 @@
 <?php
+/*** 
+ * En este archivo se define la clase Usuario, que se encarga de gestionar los usuarios.
+ * La clase tiene un constructor que recibe la conexión a la base de datos y métodos para 
+ * consultar, insertar, editar y eliminar (actualizar) usuarios.
+ */
 class Usuario
 {
     private $conexion;

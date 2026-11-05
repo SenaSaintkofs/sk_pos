@@ -1,4 +1,9 @@
 <?php
+/*** 
+ * En este archivo se define la clase Venta, que se encarga de gestionar las ventas.
+ * La clase tiene un constructor que recibe la conexión a la base de datos y métodos para 
+ * consultar, insertar, editar y eliminar ventas.
+ */
     class Venta {
         private $conexion;
 

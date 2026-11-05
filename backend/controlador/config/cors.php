@@ -1,5 +1,5 @@
 <?php
-// Lineas importantes para permiso CORS
+// Lineas importantes para permiso CORS (Cross-Origin Resource Sharing)
 header('Access-Control-Allow-Origin: https://demo-pos.saintkofs.pw');
 header('Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE');
 header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization');

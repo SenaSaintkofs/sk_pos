@@ -1,4 +1,9 @@
 <?php
+/*** 
+ * En este archivo se define la clase Login, que se encarga de gestionar el inicio de sesión de los usuarios.
+ * La clase tiene un constructor que recibe la conexión a la base de datos y un método consultar que 
+ * verifica si el correo y la contraseña proporcionados son válidos.
+ */
 class Login
 {
     // Atributos

@@ -5,13 +5,14 @@
     // cargar modelos
     require_once('../modelo/conexion.php');
     require_once('../modelo/categoria.php');
+    
+    $vec = []; // definir vector de respuesta
 
-    $vec = [];
+    global $conexion; // Variable Global a la DB
+    $control = $_GET['control']; // tomar dato de control por URL
+    $categoria = new Categoria($conexion); // instanciar clase y pasarle la conexion a la DB
 
-    global $conexion;
-    $control = $_GET['control'];
-    $categoria = new Categoria($conexion);
-
+    // switch para controlar la acción a realizar según el valor de control
     switch($control) {
         case 'consultar':
             $vec = $categoria->consultar();
@@ -32,9 +33,9 @@
             $vec = $categoria->eliminar($id);
         break;
     }
-
+    // convertir vector a JSON y mostrarlo
     $datos = json_encode($vec);
-    header('Content-Type: application/json');
+    header('Content-Type: application/json'); // indicar que es json
     echo $datos;
 
 // http://localhost:8080/controlador/categoria.php?control=consultar

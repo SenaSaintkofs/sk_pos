@@ -6,7 +6,7 @@ import { Footer } from './footer/footer';
 
 @Component({
   selector: 'app-main',
-  imports: [RouterModule, Header, Nav, Footer],
+  imports: [RouterModule, Header, Nav, Footer], // importa componentes por el template
   templateUrl: './main.html',
   styleUrl: './main.css',
 })

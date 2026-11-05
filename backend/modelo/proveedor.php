@@ -1,4 +1,9 @@
 <?php
+/*** 
+ * En este archivo se define la clase Proveedor, que se encarga de gestionar los proveedores.
+ * La clase tiene un constructor que recibe la conexión a la base de datos y métodos para 
+ * consultar, insertar, editar y eliminar proveedores.
+ */
     class Proveedor{
         // Atrbutos
         private $conexion;

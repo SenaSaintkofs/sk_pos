@@ -11,6 +11,9 @@ import { Categoria } from '../../servicios/categoria';
   templateUrl: './productos.html',
   styleUrl: './productos.css'
 })
+
+// Clase principal del componente de productos
+// OnInit: Se ejecuta al inicializar el componente, cargando los productos y categorías.
 export class Productos implements OnInit {
   productos: any[] = [];
   listCategorias: any[] = [];
@@ -28,6 +31,7 @@ export class Productos implements OnInit {
     imagen_url: ''
   };
 
+  
   id_producto: number = 0;
   m_formulario: boolean = false;
   botones_formulario: boolean = false;
@@ -44,6 +48,7 @@ export class Productos implements OnInit {
     this.cargarCategorias();
   }
 
+  // Consulta los productos desde el servicio y actualiza la vista.
   consulta(): void {
     this.sProducto.consulta().subscribe({
       next: (resultado: any) => {

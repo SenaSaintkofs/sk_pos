@@ -7,32 +7,34 @@ require_once('config/cors.php');
 require_once('../modelo/conexion.php');
 require_once('../modelo/pedido.php');
 
-global $conexion;
-$vec = [];
-$control = isset($_GET['control']) ? $_GET['control'] : '';
-$pedido = new Pedido($conexion);
+global $conexion; // Variable Global a la DB
+$vec = []; // definir vector de respuesta
+$control = isset($_GET['control']) ? $_GET['control'] : '';  // tomar dato de control por URL o asignar vacio
+$pedido = new Pedido($conexion); // instanciar clase y pasarle la conexion a la DB
 
+// switch para controlar la acción a realizar según el valor de control
 switch ($control) {
-    case 'consulta':
+    case 'consulta': // si el control es 'consulta', llamar al metodo consulta de la clase Pedido
         $vec = $pedido->consulta();
         break;
-    case 'insertar':
+    case 'insertar': // si el control es 'insertar', obtener los datos enviados en formato JSON, decodificarlos y llamar al metodo insertar de la clase Pedido
         $json = file_get_contents('php://input');
         $params = json_decode($json);
         $vec = $pedido->insertar($params);
         break;
-    case 'editar':
+    case 'editar': // si el control es 'editar', obtener los datos enviados en formato JSON, decodificarlos y llamar al metodo editar de la clase Pedido
         $json = file_get_contents('php://input');
         $id = $_GET['id'];
         $params = json_decode($json);
         $vec = $pedido->editar($id, $params);
         break;
-    case 'eliminar':
+    case 'eliminar': // si el control es 'eliminar', obtener el id del registro a eliminar desde la URL y llamar al metodo eliminar de la clase Pedido
         $id = $_GET['id'];
         $vec = $pedido->eliminar($id);
         break;
 }
 
+// convertir vector a JSON y mostrarlo
 $datos = json_encode($vec);
-header('Content-Type: application/json');
+header('Content-Type: application/json'); // indicar que es json
 echo $datos;

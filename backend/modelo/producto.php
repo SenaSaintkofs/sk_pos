@@ -1,4 +1,9 @@
 <?php
+/*** 
+ * En este archivo se define la clase Producto, que se encarga de gestionar los productos.
+ * La clase tiene un constructor que recibe la conexión a la base de datos y métodos para 
+ * consultar, insertar, editar y eliminar productos.
+ */
     class Producto {
         private $conexion;
 

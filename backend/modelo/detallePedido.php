@@ -1,4 +1,8 @@
 <?php
+/*** 
+ * Clase para gestionar los detalles de los pedidos
+ * crud: consulta, insertar, editar, eliminar
+ */
     class DetallePedido{
         // Atrbutos
         private $conexion;

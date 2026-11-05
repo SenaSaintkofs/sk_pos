@@ -6,6 +6,7 @@ class Dashboard {
         $this->conexion = $conexion;
     }
 
+    // metodo para obtener los datos del dashboard
     public function obtenerDatos() {
         $datos = [];
 

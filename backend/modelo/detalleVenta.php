@@ -1,4 +1,8 @@
 <?php
+/*** 
+ * Clase para gestionar los detalles de las ventas
+ * crud: consulta, insertar, editar, eliminar
+ */
     class DetalleVenta{
         // Atrbutos
         private $conexion;

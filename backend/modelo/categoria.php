@@ -3,6 +3,7 @@
         // Atrbutos
         private $conexion;
 
+        // definir constructor para inicializar la conexion a la DB
         public function __construct($conexion)
         {
             $this->conexion =$conexion;

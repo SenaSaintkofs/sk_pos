@@ -172,6 +172,7 @@ export class Ventas implements OnInit {
     this.modals[modalId] = false;
   }
 
+  // --- ACCIONES ---
   applyDiscount(): void {
     if (this.discountType === 'percent') {
       this.discountAmount = (this.subtotal * this.discountInput) / 100;
@@ -201,6 +202,7 @@ export class Ventas implements OnInit {
       return;
     }
 
+    // Preparar datos de la venta
     const datosVenta = {
       id_usuario_cliente: this.customer.id_usuario,
       id_usuario_empleado: Number(sessionStorage.getItem('id')) || 1,
@@ -215,6 +217,7 @@ export class Ventas implements OnInit {
       productos: this.cart
     };
 
+    // Llamada al servicio para registrar la venta
     this.sVenta.insertar(datosVenta).subscribe({
       next: (res: any) => {
         if (res?.resultado?.toLowerCase() === 'ok') {
