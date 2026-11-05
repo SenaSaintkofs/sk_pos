@@ -25,32 +25,32 @@ class Usuario
     public function eliminar($id)
     {
         $vec = [];
-        $sql = "DELETE FROM USUARIO WHERE id_usuario = ?";
+        $sql = "UPDATE USUARIO SET activo = FALSE WHERE id_usuario = ?";
         $stmt = mysqli_prepare($this->conexion, $sql);
 
         if ($stmt) {
             mysqli_stmt_bind_param($stmt, "i", $id);
-
             if (mysqli_stmt_execute($stmt)) {
                 $vec['resultado'] = "ok";
-                $vec['mensaje'] = "Se elimino el registro";
+                $vec['mensaje'] = "Se cambió el registro a inactivo.";
             } else {
-                mysqli_stmt_close($stmt);
-
-                $sql = "UPDATE USUARIO SET activo = FALSE WHERE id_usuario = ?";
-                $stmt = mysqli_prepare($this->conexion, $sql);
-                mysqli_stmt_bind_param($stmt, "i", $id);
-                mysqli_stmt_execute($stmt);
-                mysqli_stmt_close($stmt);
-                $vec['resultado'] = "ok";
-                $vec['mensaje'] = "Tiene registros asociados. Se cambio el registro a inactivo.";
+                $vec['resultado'] = "error";
+                $vec['mensaje'] = "No se pudo inactivar el registro.";
             }
+            mysqli_stmt_close($stmt);
         } else {
             $vec['resultado'] = "error";
-            $vec['mensaje'] = "No se elimino el registro";
+            $vec['mensaje'] = "Error al preparar la consulta.";
         }
         return $vec;
     }
+    /*
+    USUARIO
+    CATEGORIA
+    PROVEEDOR
+    PRODUCTO
+    PEDIDO
+    */
 
     public function insertar($params)
     {

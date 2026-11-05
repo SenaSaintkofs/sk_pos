@@ -10,7 +10,7 @@
         public function consulta() {
             $sql = "SELECT V.*, CONCAT_WS(' ', U.primer_nombre, U.primer_apellido) AS usuario FROM VENTA V
                     LEFT JOIN USUARIO U ON V.id_usuario_cliente = U.id_usuario
-                    WHERE V.activo = TRUE ORDER BY V.fecha DESC";
+                    ORDER BY V.fecha DESC";
 
             $res = mysqli_query($this->conexion, $sql) or die("Error al consultar las ventas");
 

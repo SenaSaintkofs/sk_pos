@@ -24,23 +24,15 @@
 
         public function eliminar($id) {
             $vec = [];
-            $sql = "DELETE FROM CATEGORIA WHERE id_categoria = $id";
-            
+            $sql = "UPDATE CATEGORIA SET activo = FALSE WHERE id_categoria = $id";
+
             if (mysqli_query($this->conexion, $sql)) {
                 $vec['resultado'] = "OK";
-                $vec['mensaje'] = "Se elimino el registro";
+                $vec['mensaje'] = "Se desactivo el registro";
             } else {
-                $sql = "UPDATE CATEGORIA SET activo = FALSE WHERE id_categoria = $id";
-
-                if (mysqli_query($this->conexion, $sql)) {
-                    $vec['resultado'] = "OK";
-                    $vec['mensaje'] = "Tiene registros asociados. Se cambio el registro a inactivo";
-                } else {
-                    $vec['resultado'] = "ERROR";
-                    $vec['mensaje'] = "No se elimino el registro";
-                }
+                $vec['resultado'] = "ERROR";
+                $vec['mensaje'] = "No se pudo actualizar el registro";
             }
-
             return $vec;
         }
 

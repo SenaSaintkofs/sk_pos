@@ -39,6 +39,9 @@ class Pedido
                            VALUES ($id_pedido, $params->id_producto, $params->cantidad, $params->costo_unitario)";
             mysqli_query($this->conexion, $sqlDetalle);
 
+            $sqlStock = "UPDATE PRODUCTO SET stock = stock + $params->cantidad WHERE id_producto = $params->id_producto";
+            mysqli_query($this->conexion, $sqlStock);
+
             return ['resultado' => 'ok', 'mensaje' => 'Pedido registrado correctamente'];
         }
 
@@ -47,6 +50,15 @@ class Pedido
 
     public function editar($id, $params)
     {
+        $sqlOld = "SELECT id_producto, cantidad FROM DETALLE_PEDIDO WHERE id_pedido = $id";
+        $resOld = mysqli_query($this->conexion, $sqlOld);
+        if ($rowOld = mysqli_fetch_assoc($resOld)) {
+            $old_id_producto = $rowOld['id_producto'];
+            $old_cantidad = $rowOld['cantidad'];
+            // Quitar Stock del pdedido
+            mysqli_query($this->conexion, "UPDATE PRODUCTO SET stock = stock - $old_cantidad WHERE id_producto = $old_id_producto");
+        }
+
         $sqlPedido = "UPDATE PEDIDO SET id_proveedor = $params->id_proveedor, valor_total = $params->valor_total, estado_pago = '$params->estado_pago' 
                       WHERE id_pedido = $id";
         mysqli_query($this->conexion, $sqlPedido);
@@ -55,11 +67,17 @@ class Pedido
                        WHERE id_pedido = $id";
         mysqli_query($this->conexion, $sqlDetalle);
 
+        $sqlStock = "UPDATE PRODUCTO SET stock = stock + $params->cantidad WHERE id_producto = $params->id_producto";
+        mysqli_query($this->conexion, $sqlStock);
+
         return ['resultado' => 'ok', 'mensaje' => 'Pedido actualizado correctamente'];
     }
 
     public function eliminar($id)
     {
+        // Cancelar pedido
+        mysqli_query($this->conexion, "UPDATE PRODUCTO p JOIN DETALLE_PEDIDO dp ON p.id_producto = dp.id_producto SET p.stock = p.stock - dp.cantidad WHERE dp.id_pedido = $id");
+
         $vec = [];
         $sql = "DELETE FROM PEDIDO WHERE id_pedido = $id";
 
