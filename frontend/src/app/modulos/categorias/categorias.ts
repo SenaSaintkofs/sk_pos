@@ -145,4 +145,10 @@ export class Categorias implements OnInit {
       item.nombre.toLowerCase().includes(this.buscarCategoria.toLowerCase())
     );
   }
+
+  // evitar error de duplicados angular
+  trackById(index: number, item: any): number {
+    return item.id_categoria || index;
+  }
 }
+
