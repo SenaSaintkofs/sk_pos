@@ -10,7 +10,7 @@
         }
 
         public function consulta() {
-            $sql = "SELECT * FROM PROVEEDOR ORDER WHERE activo = TRUE BY nombre";
+            $sql = "SELECT * FROM PROVEEDOR WHERE activo = TRUE ORDER BY nombre";
             $res = mysqli_query($this->conexion, $sql) or die("No se ha encontrado categoria");
 
             $vec = [];
@@ -22,7 +22,7 @@
             return $vec;
         }
 
-        public function eliminar($id) {
+/*        public function eliminar($id) {
             $vec = [];
             $sql = "DELETE FROM PROVEEDOR WHERE id_proveedor = $id";
 
@@ -43,7 +43,21 @@
 
             return $vec;
         }
+*/
+    public function eliminar($id) {
+        $vec = [];
+        $sql = "UPDATE PROVEEDOR SET activo = FALSE WHERE id_proveedor = $id";
 
+        if (mysqli_query($this->conexion, $sql)) {
+            $vec['resultado'] = "ok";
+            $vec['mensaje'] = "Se cambió el proveedor a inactivo";
+        } else {
+            $vec['resultado'] = "error";
+            $vec['mensaje'] = "No se pudo actualizar el registro";
+        }
+
+        return $vec;
+    }
         public function insertar($params) {
             $sql = "INSERT INTO PROVEEDOR(nit, nombre, telefono) VALUES('$params->nit', '$params->nombre', '$params->telefono')"; // comilla solo con txt
             mysqli_query($this->conexion, $sql) or die("No se inserto el registro");
