@@ -1,0 +1,34 @@
+info:
+  name: Insertar
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{baseUrl}}/usuario.php?control=insertar"
+  params:
+    - name: control
+      value: insertar
+      type: query
+  body:
+    type: json
+    data: |-
+      {
+        "correo": "holac@saintkofs.pw",
+        "clave": "ClaveSegura2026",
+        "rol": "EMPLEADO",
+        "primer_nombre": "Tatiana",
+        "segundo_nombre": "María",
+        "primer_apellido": "Gómez",
+        "segundo_apellido": "Pérez",
+        "numero_documento": "6547658568",
+        "telefono": "3157894588"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

@@ -1,0 +1,47 @@
+info:
+  name: Insertar
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{baseUrl}}/venta.php?control=insertar"
+  params:
+    - name: control
+      value: insertar
+      type: query
+  body:
+    type: json
+    data: |
+      {
+        "id_usuario_cliente": 4,
+        "id_usuario_empleado": 2,
+        "subtotal": 11200,
+        "descuento_total": 0,
+        "valor_envio": 0,
+        "total": 11200,
+        "tipo_pago": "QR",
+        "comentario_envio": "Venta directa en caja",
+        "monto_recibido": 15000,
+        "cambio": 3800,
+        "productos": [
+          {
+            "id_producto": 1,
+            "qty": 2,
+            "price": 3200
+          },
+          {
+            "id_producto": 3,
+            "qty": 1,
+            "price": 4800
+          }
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
