@@ -1,0 +1,37 @@
+info:
+  name: Editar
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{baseUrl}}/venta.php?control=editar&id=9"
+  params:
+    - name: control
+      value: editar
+      type: query
+    - name: id
+      value: "9"
+      type: query
+  body:
+    type: json
+    data: |
+      {
+        "id_usuario_cliente": 4,
+        "subtotal": 17400,
+        "descuento_total": 0,
+        "valor_envio": 0,
+        "total": 17400,
+        "tipo_pago": "EFECTIVO",
+        "comentario_envio": "Pago actualizado a transferencia QR",
+        "monto_recibido": 17400,
+        "cambio": 0
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

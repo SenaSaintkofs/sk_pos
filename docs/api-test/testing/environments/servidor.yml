@@ -1,0 +1,5 @@
+name: servidor
+variables:
+  - name: baseUrl
+    value: https://demo-pos.saintkofs.pw/controlador/
+    description: Nombre del Dominio

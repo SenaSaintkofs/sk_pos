@@ -1,0 +1,31 @@
+info:
+  name: Insertar
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{baseUrl}}/pedido.php?control=insertar"
+  params:
+    - name: control
+      value: insertar
+      type: query
+  body:
+    type: json
+    data: |
+      {
+        "id_proveedor": 2,
+        "valor_total": 99000,
+        "estado_pago": "PAGADO",
+        "id_producto": 1,
+        "cantidad": 20,
+        "costo_unitario": 2500
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

@@ -1,0 +1,37 @@
+info:
+  name: Editar
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{baseUrl}}/producto.php?control=editar&id=17"
+  params:
+    - name: control
+      value: editar
+      type: query
+    - name: id
+      value: "17"
+      type: query
+  body:
+    type: json
+    data: |
+      {
+        "id_categoria": 1,
+        "codigo_barras": "7701234567899",
+        "nombre": "Arroz Blanco Premium 1kg",
+        "stock": 100,
+        "unidad_medida": "UNIDAD",
+        "costo_compra": 2600,
+        "precio_venta": 3400,
+        "controla_stock": true,
+        "imagen_url": "https://unsplash.com"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
